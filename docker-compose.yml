@@ -19,3 +19,22 @@ services:
       test: "pg_isready --username=postgres && psql --username=postgres --list"
       timeout: 10s
       retries: 20
+
+  minio:
+    image: minio/minio:latest
+    restart: always
+    environment:
+      - MINIO_ACCESS_KEY=minioaccesskey
+      - MINIO_SECRET_KEY=miniosecretkey
+    ports:
+      - "9002:9002"
+      - "9003:9003"
+    volumes:
+      - ./minio-data:/data
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s

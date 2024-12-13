@@ -3,7 +3,8 @@ package database
 import (
 	"log"
 	"server/config"
-	model_user "server/model/user"
+
+	model_order "server/model/order"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -45,7 +46,7 @@ func (s *Postgres) Init() error {
 
 func (s *Postgres) Migrate() error {
 	err := s.db.AutoMigrate(
-		&model_user.User{},
+		&model_order.Order{},
 	)
 	return err
 }
