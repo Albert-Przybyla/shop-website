@@ -4,7 +4,7 @@ import (
 	"log"
 	"server/internal/shared/config"
 
-	model_order "server/internal/shared/model/order"
+	model "server/internal/shared/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -46,7 +46,14 @@ func (s *Postgres) Init() error {
 
 func (s *Postgres) Migrate() error {
 	err := s.db.AutoMigrate(
-		&model_order.Order{},
+		&model.Order{},
+		&model.Product{},
+		&model.Admin{},
 	)
-	return err
+
+	if err != nil {
+		return err
+	}
+
+	return s.createDefaultAdmin()
 }

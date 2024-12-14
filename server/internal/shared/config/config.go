@@ -24,7 +24,9 @@ type Config struct {
 	MinioAccessKey string
 	MinioSecretKey string
 	MinioUseSSL    bool
-	Port           string
+	UserPort       string
+	AdminPort      string
+	JWTSecret      string
 }
 
 func LoadConfig() error {
@@ -53,7 +55,10 @@ func loadConfig() error {
 		MinioSecretKey: os.Getenv("MINIO_SECRET_KEY"),
 		MinioUseSSL:    os.Getenv("MINIO_USE_SSL") == "true",
 
-		Port: os.Getenv("PORT"),
+		UserPort:  os.Getenv("USER_PORT"),
+		AdminPort: os.Getenv("ADMIN_PORT"),
+
+		JWTSecret: os.Getenv("JWT_SECRET"),
 	}
 
 	return nil
