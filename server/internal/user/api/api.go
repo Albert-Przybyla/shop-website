@@ -1,9 +1,9 @@
 package api
 
 import (
-	"server/config"
-	"server/database"
-	minio_conf "server/minio"
+	"server/internal/shared/config"
+	"server/internal/shared/database"
+	minio_conf "server/internal/shared/minio"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package model
 
 import (
-	product "server/model/product"
+	product "server/internal/shared/model/product"
 	"time"
 )
 

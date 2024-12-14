@@ -2,9 +2,9 @@ package database
 
 import (
 	"log"
-	"server/config"
+	"server/internal/shared/config"
 
-	model_order "server/model/order"
+	model_order "server/internal/shared/model/order"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

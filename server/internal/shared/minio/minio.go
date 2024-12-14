@@ -3,7 +3,7 @@ package minio
 import (
 	"context"
 	"log"
-	"server/config"
+	"server/internal/shared/config"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"

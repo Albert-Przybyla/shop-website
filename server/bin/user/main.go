@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"server/api"
-	"server/config"
+	"server/internal/shared/config"
+	"server/internal/user/api"
 )
 
 func main() {
