@@ -20,7 +20,7 @@ func (p *Postgres) CreateProduct(req *model.ProductRequest) (*model.CreateElemen
 	}
 
 	return &model.CreateElementResponse{
-		Id: product.ID,
+		Id: product.Id,
 	}, nil
 }
 
@@ -55,7 +55,7 @@ func (p *Postgres) GetProducts(pageSize, pageNumber int) (model.PagedListRespons
 	var productResponses []model.ProductAdminResponse
 	for _, product := range products {
 		productResponses = append(productResponses, model.ProductAdminResponse{
-			ID:          product.ID,
+			ID:          product.Id,
 			Name:        product.Name,
 			Description: product.Description,
 		})
