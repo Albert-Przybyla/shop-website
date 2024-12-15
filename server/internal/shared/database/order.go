@@ -65,6 +65,26 @@ func (p *Postgres) GetOrderConfirmationCode(id string) (string, error) {
 	return order.ConfirmationCode, nil
 }
 
+func (p *Postgres) GetOrders(pageNumber, pageSize int) (model.PagedListResponse[model.Order], error) {
+	var orders []model.Order
+	res := p.db.Limit(pageSize).Offset((pageNumber - 1) * pageSize).Find(&orders)
+	if res.Error != nil {
+		return model.PagedListResponse[model.Order]{}, res.Error
+	}
+	var totalItems int64
+	p.db.Model(&model.Product{}).Count(&totalItems)
+	totalPages := int((totalItems + int64(pageSize) - 1) / int64(pageSize))
+
+	response := model.PagedListResponse[model.Order]{
+		Items:       orders,
+		TotalItems:  int(totalItems),
+		TotalPages:  totalPages,
+		CurrentPage: pageNumber,
+	}
+
+	return response, nil
+}
+
 func generateConfirmationCode() string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))

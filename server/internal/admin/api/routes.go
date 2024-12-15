@@ -9,4 +9,6 @@ func (a *APIServer) Routes() {
 	a.engine.GET("/product/:id", a.validateToken(), a.GetProductById)
 	a.engine.PUT("/product/:id", a.validateToken(), a.UpdateProduct)
 	a.engine.PATCH("/product/:id", a.validateToken(), a.SetDiscount)
+
+	a.engine.GET("/order", a.validateToken(), a.GetOrders)
 }
