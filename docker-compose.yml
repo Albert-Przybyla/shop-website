@@ -21,20 +21,28 @@ services:
       retries: 20
 
   minio:
-    image: minio/minio:latest
-    restart: always
+    platform: linux/arm64
+    image: bitnami/minio:latest
+    container_name: "minio-1"
+    restart: unless-stopped
+    tty: true
     environment:
-      - MINIO_ACCESS_KEY=minioaccesskey
-      - MINIO_SECRET_KEY=miniosecretkey
+      - "MINIO_ROOT_USER=admin"
+      - "MINIO_ROOT_PASSWORD=12345678"
+      - "MINIO_DEFAULT_BUCKETS=img-cache:none,84ccbbab-e7ca-46f9-ae3e-d8f1e3939660:none,762e26e9-858b-4cc4-b4e3-93ca4c80902e:none,a23abac4-f3f3-4a98-9db8-2904972be59f:none,38f96824-6567-4a6d-a7db-f886be19401a:none,"
+      - "MINIO_BROWSER=on"
+      - "CONSOLE_SECURE_TLS_REDIRECT=off"
     ports:
-      - "9002:9002"
-      - "9003:9003"
+      - "9001:9001"
+      - "9000:9000"
     volumes:
-      - ./minio-data:/data
-    command: server /data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 10s
+      - minio_data:/data
+    networks:
+      - network1
+
+networks:
+  network1:
+    driver: bridge
+volumes:
+  minio_data:
+    driver: local

@@ -42,7 +42,7 @@ func New() *MinioStorage {
 }
 
 func (s *MinioStorage) Init() error {
-	buckets := []string{"images", "documents"}
+	buckets := []string{"images"}
 
 	for _, bucket := range buckets {
 		err := s.createBucket(bucket)
