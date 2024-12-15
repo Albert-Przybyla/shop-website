@@ -4,6 +4,8 @@ import (
 	"math/rand"
 	model "server/internal/shared/model"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateElementResponse, error) {
@@ -41,6 +43,26 @@ func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateElem
 	return &model.CreateElementResponse{
 		Id: order.Id,
 	}, nil
+}
+
+func (p *Postgres) ChangeOrderStatus(id string, status model.Status) error {
+	res := p.db.Model(&model.Order{}).Where("id = ? ", id).Update("status", status)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
+
+func (p *Postgres) GetOrderConfirmationCode(id string) (string, error) {
+	var order model.Order
+	res := p.db.Model(&model.Order{}).Where("id = ? ", id).First(&order)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return "", res.Error
+		}
+		return "", res.Error
+	}
+	return order.ConfirmationCode, nil
 }
 
 func generateConfirmationCode() string {

@@ -45,3 +45,7 @@ type CreateOrderRequest struct {
 	Country    string   `json:"country"`
 	Products   []string `json:"products"`
 }
+
+type VerifyOrderRequest struct {
+	ConfirmationCode string `json:"confirmation_code"`
+}
