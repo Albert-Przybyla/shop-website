@@ -49,6 +49,7 @@ func (s *Postgres) Migrate() error {
 		&model.Order{},
 		&model.Product{},
 		&model.Admin{},
+		&model.ProductPhoto{},
 	)
 
 	if err != nil {

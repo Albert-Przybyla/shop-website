@@ -85,6 +85,18 @@ func (p *Postgres) GetOrders(pageNumber, pageSize int) (model.PagedListResponse[
 	return response, nil
 }
 
+func (p *Postgres) GetOrderById(id string) (*model.Order, error) {
+	var order model.Order
+	res := p.db.Preload("Products").Where("id = ?", id).First(&order)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return nil, res.Error
+		}
+		return nil, res.Error
+	}
+	return &order, nil
+}
+
 func generateConfirmationCode() string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))

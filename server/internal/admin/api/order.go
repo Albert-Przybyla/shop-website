@@ -19,3 +19,13 @@ func (a *APIServer) GetOrders(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, orders)
 }
+
+func (a *APIServer) GetOrderById(c *gin.Context) {
+	id := c.Param("id")
+	order, err := a.db.GetOrderById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, order)
+}

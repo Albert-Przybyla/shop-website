@@ -73,7 +73,7 @@ func (p *Postgres) GetProducts(pageSize, pageNumber int) (model.PagedListRespons
 
 func (p *Postgres) GetProductById(id string) (*model.Product, error) {
 	var product model.Product
-	res := p.db.Model(&model.Product{}).Where("id = ?", id).First(&product)
+	res := p.db.Preload("Photos").Where("id = ?", id).First(&product)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return nil, res.Error
@@ -81,4 +81,12 @@ func (p *Postgres) GetProductById(id string) (*model.Product, error) {
 		return nil, res.Error
 	}
 	return &product, nil
+}
+
+func (p *Postgres) AddPhotoToProduct(photo *model.ProductPhoto) error {
+	res := p.db.Create(photo)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
 }
