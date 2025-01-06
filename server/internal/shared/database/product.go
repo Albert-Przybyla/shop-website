@@ -8,10 +8,12 @@ import (
 
 func (p *Postgres) CreateProduct(req *model.ProductRequest) (*model.CreateElementResponse, error) {
 	product := model.Product{
-		Name:        req.Name,
-		Description: req.Description,
-		Price:       req.Price,
-		Discount:    0,
+		Name:                 req.Name,
+		Description:          req.Description,
+		Material:             req.Material,
+		AditionalDescription: req.AditionalDescription,
+		Price:                req.Price,
+		Discount:             0,
 	}
 	res := p.db.Create(&product)
 

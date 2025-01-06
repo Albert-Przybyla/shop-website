@@ -3,6 +3,8 @@ package api
 func (a *APIServer) Routes() {
 	a.engine.POST("/login", a.Login)
 	a.engine.POST("/admin", a.validateToken(), a.CreateAdmin)
+	a.engine.GET("/admin", a.validateToken(), a.GetAdmins)
+	a.engine.GET("/admin/:id", a.validateToken(), a.GetAdminById)
 
 	a.engine.POST("/product", a.validateToken(), a.CreateProduct)
 	a.engine.GET("/product", a.validateToken(), a.GetProducts)

@@ -24,3 +24,22 @@ func (a *APIServer) CreateAdmin(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+func (a *APIServer) GetAdmins(c *gin.Context) {
+	admins, err := a.db.GetAdmins()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, admins)
+}
+
+func (a *APIServer) GetAdminById(c *gin.Context) {
+	id := c.Param("id")
+	admin, err := a.db.GetAdminById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, admin)
+}

@@ -95,3 +95,24 @@ func (s *Postgres) createDefaultAdmin() error {
 
 	return nil
 }
+
+func (p *Postgres) GetAdminById(id string) (*model.Admin, error) {
+	var admin model.Admin
+	res := p.db.Model(&model.Admin{}).Where("id = ?", id).First(&admin)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return nil, res.Error
+		}
+		return nil, res.Error
+	}
+	return &admin, nil
+}
+
+func (p *Postgres) GetAdmins() ([]model.Admin, error) {
+	var admins []model.Admin
+	res := p.db.Find(&admins)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return admins, nil
+}

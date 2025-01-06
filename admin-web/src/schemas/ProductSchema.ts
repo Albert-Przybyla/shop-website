@@ -7,6 +7,12 @@ export const ProductSchema = z.object({
   description: z.string().min(6, {
     message: "Opis musi być dłuższy niż 6 znaków.",
   }),
+  aditional_description: z.string().min(1, {
+    message: "Pole wymagane.",
+  }),
+  material: z.string().min(1, {
+    message: "Pole wymagane.",
+  }),
   price: z.number().min(6, {
     message: "Cena musi być większa niż 6 PLN",
   }),

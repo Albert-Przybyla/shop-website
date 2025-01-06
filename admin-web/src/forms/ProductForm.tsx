@@ -54,6 +54,28 @@ const ProductForm = ({ onClose, data, elementId }: ModalProps<ProductModel>) => 
         />
         <FormField
           control={form.control}
+          name="aditional_description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Opis dodatkowy</FormLabel>
+              <Textarea {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="material"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Materiał</FormLabel>
+              <Textarea {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="price"
           render={({ field }) => (
             <FormItem>

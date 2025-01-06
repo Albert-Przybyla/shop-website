@@ -31,9 +31,11 @@ type SizeRequest struct {
 }
 
 type ProductRequest struct {
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
+	Name                 string  `json:"name"`
+	Description          string  `json:"description"`
+	AditionalDescription string  `json:"aditional_description"`
+	Material             string  `json:"material"`
+	Price                float64 `json:"price"`
 }
 
 type ProductSetDiscountRequest struct {
