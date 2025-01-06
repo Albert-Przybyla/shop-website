@@ -12,6 +12,8 @@ export interface ProductDetailsResponse {
   id: string;
   name: string;
   description: string;
+  aditional_description: string;
+  material: string;
   price: number;
   discount: number;
   created_at: string;
@@ -53,6 +55,15 @@ export interface OrderResponse {
 export interface SizeResponse {
   id: string;
   label: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminResponse {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
   created_at: string;
   updated_at: string;
 }

@@ -92,7 +92,23 @@ const ProductDetails = ({ id }: Props) => {
           <div className="space-y-0.5">
             <small>Opis produktu</small>
             {product ? (
-              <h2 className="text-xl ps-2 min-w-[130px]">{product.description}</h2>
+              <h2 className="text-xl ps-2 min-w-[130px] max-w-[330px] truncate">{product.description}</h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <small>Dodatkowy opis produktu</small>
+            {product ? (
+              <h2 className="text-xl ps-2 min-w-[130px] max-w-[330px] truncate">{product.aditional_description}</h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <small>Material</small>
+            {product ? (
+              <h2 className="text-xl ps-2 min-w-[130px] max-w-[330px] truncate">{product.material}</h2>
             ) : (
               <Skeleton className="h-8 w-[130px]" />
             )}

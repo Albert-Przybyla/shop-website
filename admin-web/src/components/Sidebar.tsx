@@ -18,6 +18,7 @@ import {
   FileText,
   Home,
   LogOut,
+  Shield,
   Shirt,
   Sparkles,
   Truck,
@@ -66,6 +67,11 @@ export function Sidebar() {
       icon: Truck,
       title: "Metody dostawy",
       url: "/app/delivery-methods",
+    },
+    {
+      icon: Shield,
+      title: "Administratorzy",
+      url: "/app/admins",
     },
   ];
   return (
