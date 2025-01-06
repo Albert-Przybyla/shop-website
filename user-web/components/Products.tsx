@@ -1,15 +1,10 @@
 import { fetchProducts } from "@/api/product";
 import { PagedResponse } from "@/types/base.types";
 import { Product } from "@/types/types.response";
-import Image from "next/image";
 import NavBtn from "./actions/NavBtn";
 
 const Products = async () => {
   const products: PagedResponse<Product> = await fetchProducts();
-
-  const handleAddToCart = () => {
-    console.log("Produkt dodany do koszyka");
-  };
 
   return (
     <div className="container mx-auto my-[100px]">

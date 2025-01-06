@@ -3,7 +3,16 @@ import { api } from "./api";
 import { Product } from "@/types/types.response";
 
 export const fetchProducts = async (page: number = 1, pageSize: number = 10): Promise<PagedResponse<Product>> => {
-  const response = await api.get(`/product?page_number=${page}&page_size=${pageSize}`);
+  const response = await api.get(`/product`, {
+    params: {
+      page_number: page,
+      page_size: pageSize,
+      timestamp: new Date().getTime(),
+    },
+    headers: {
+      "Cache-Control": "no-store",
+    },
+  });
   return response.data;
 };
 
