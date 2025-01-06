@@ -19,7 +19,16 @@ const Products = async () => {
           return (
             <div key={product.id} className="border p-4 w-full md:w-1/2 xl:w-1/4 flex flex-col items-center gap-3">
               <div className="relative w-full aspect-square">
-                {product.photos.length > 0 && <Image src={product.photos[0].url} alt={product.name} fill />}
+                {product.photos.length > 0 && (
+                  <div
+                    style={{
+                      backgroundImage: `url(${product.photos[0].url})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                    className="w-full h-full"
+                  ></div>
+                )}
               </div>
               <h3 className="text-xl font-bold">{product.name}</h3>
               <p>{product.price} PLN</p>

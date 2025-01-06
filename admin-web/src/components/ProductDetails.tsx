@@ -152,7 +152,7 @@ const ProductDetails = ({ id }: Props) => {
           <div>
             {product?.photos.map((photo) => (
               <div key={photo.id}>
-                <ModalImage small={photo.url + "?w=200&h=200"} large={photo.url} alt="zdjecie" />;
+                <ModalImage small={photo.url + "?w=200&h=200"} large={photo.url} alt="zdjecie" />
               </div>
             ))}
           </div>

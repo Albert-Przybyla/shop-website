@@ -37,7 +37,9 @@ func (m *Mailer) SendNewOrderStatusEmail(to string, status model.Status, data Ne
 	case "shipped":
 		data.Title = "Twoje zamówienie zostało wysłane!"
 		data.SubTitle = "Z przyjemnością informujemy, że Twoje zamówienie zostało wysłane. Poniżej znajdują się szczegóły przesyłki:"
-		data.Article1 = `Możesz śledzić swoją przesyłkę pod adresem: <a href="{{.TrackingUrl}}" target="_blank" style="color: #5271ff;">Śledź przesyłkę</a>`
+		if data.TrackingUrl != nil {
+			data.Article1 = `Możesz śledzić swoją przesyłkę pod adresem: ` + *data.TrackingUrl + ` .`
+		}
 		data.Article2 = "Jeśli masz jakiekolwiek pytania dotyczące przesyłki, skontaktuj się z naszym zespołem wsparcia."
 	case "completed":
 		data.Title = "Dziękujemy za zakup!"

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://blue-elephant.pl
+
+# Sitemaps
+Sitemap: https://blue-elephant.pl/sitemap.xml

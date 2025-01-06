@@ -61,7 +61,7 @@ func (a *APIServer) UpdateOrderStatus(c *gin.Context) {
 		SubTitle:    "",
 		Article1:    "",
 		Article2:    "",
-		TrackingUrl: nil,
+		TrackingUrl: req.TrackingUrl,
 	}
 
 	mail_err := a.mailer.SendNewOrderStatusEmail(order.Email, order.Status, emailData)

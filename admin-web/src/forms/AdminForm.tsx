@@ -1,13 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { SizeModel, SizeSchema } from "@/schemas/SizeSchema";
 import { ModalProps } from "@/types/base.types";
 import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
-import { createSize, updateSize } from "@/api/size";
 import { AdminModel, AdminSchema } from "@/schemas/AdminSchema";
 import { createAdmin } from "@/api/admin";
 

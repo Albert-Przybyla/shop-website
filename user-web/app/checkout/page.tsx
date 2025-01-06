@@ -87,22 +87,22 @@ const Page = () => {
                   <p>{form.formState.errors.email?.message}</p>
                 </div>
               </div>
-              <div className="flex flex-row flex-wrap gap-6">
-                <div className="form-box w-1/2">
+              <div className="flex flex-col md:flex-row flex-wrap gap-6">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="first_name">Imię</label>
-                  <input id="first_name" {...form.register("first_name")} type="first_name" />
+                  <input id="first_name" {...form.register("first_name")} type="first_name" className="w-full" />
                   <div className="errors">
                     <p>{form.formState.errors.first_name?.message}</p>
                   </div>
                 </div>
-                <div className="form-box w-1/2">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="last_name">Nazwisko</label>
                   <input id="last_name" {...form.register("last_name")} type="last_name" />
                   <div className="errors">
                     <p>{form.formState.errors.last_name?.message}</p>
                   </div>
                 </div>
-                <div className="form-box w-1/2">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="phone">Numer telefonu</label>
                   <input id="phone" {...form.register("phone")} type="phone" />
                   <div className="errors">
@@ -110,29 +110,29 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row flex-wrap gap-6">
-                <div className="form-box w-1/2">
+              <div className="flex flex-col md:flex-row flex-wrap gap-6">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="street">Adres</label>
                   <input id="street" {...form.register("address")} type="address" />
                   <div className="errors">
                     <p>{form.formState.errors.address?.message}</p>
                   </div>
                 </div>
-                <div className="form-box w-1/2">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="city">Miasto</label>
                   <input id="city" {...form.register("city")} type="city" />
                   <div className="errors">
                     <p>{form.formState.errors.city?.message}</p>
                   </div>
                 </div>
-                <div className="form-box w-1/2">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="postal_code">Kod pocztowy</label>
                   <input id="postal_code" {...form.register("postal_code")} type="postal_code" />
                   <div className="errors">
                     <p>{form.formState.errors.postal_code?.message}</p>
                   </div>
                 </div>
-                <div className="form-box w-1/2">
+                <div className="form-box flex-grow-0">
                   <label htmlFor="country">Kraj</label>
                   <input id="country" {...form.register("country")} type="country" />
                   <div className="errors">
@@ -140,7 +140,7 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <div className="form-box w-1/2">
+              <div className="form-box">
                 <label htmlFor="note">Notatka do zamówienia</label>
                 <textarea id="note" {...form.register("note")} />
                 <div className="errors">

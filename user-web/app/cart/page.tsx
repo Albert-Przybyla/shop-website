@@ -42,7 +42,7 @@ const Page = () => {
 
   return (
     <>
-      <div className="container mx-auto my-[100px] space-y-6 max-w-[800px]">
+      <div className="container mx-auto my-[100px] space-y-6 max-w-[800px] px-3">
         <h1 className="text-3xl font-bold px-3 text-center">Koszyk</h1>
         <div className="flex flex-col gap-6">
           {Cart.map((item, index) => {

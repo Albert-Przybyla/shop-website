@@ -74,5 +74,6 @@ type VerifyOrderRequest struct {
 }
 
 type UpdateOrderStatusRequest struct {
-	Status Status `json:"status"`
+	Status      Status  `json:"status"`
+	TrackingUrl *string `json:"tracking_url"`
 }

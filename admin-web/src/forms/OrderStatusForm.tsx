@@ -49,11 +49,24 @@ const OrderStatusForm = ({ onClose, data, elementId }: ModalProps<OrderStatusMod
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nowy Status</FormLabel>
-              <Input {...field} />
+              <Input {...field} disabled />
               <FormMessage />
             </FormItem>
           )}
         />
+        {getNewStatus(data!.status!) === "shipped" && (
+          <FormField
+            control={form.control}
+            name="tracking_url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Adres do śledzenia przesyłki</FormLabel>
+                <Input {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="confirmation"
