@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *APIServer) createAdmin(c *gin.Context) {
+func (a *APIServer) CreateAdmin(c *gin.Context) {
 	var req model.CreateAdmin
 
 	if err := c.BindJSON(&req); err != nil {

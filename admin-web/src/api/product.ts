@@ -17,7 +17,7 @@ export const fetchProducts = async (
     });
 
     if (response.status !== 200) {
-      throw new Error("Failed to fetch Resellers.");
+      throw new Error("Failed to fetch products.");
     }
     return response.data as PaginatedApiResponse<ProductResponse>;
   } catch (e: any) {
@@ -32,7 +32,7 @@ export const fetchProduct = async (product_id: string): Promise<ProductDetailsRe
     const response = await api.get(`/product/${product_id}`);
 
     if (response.status !== 200) {
-      throw new Error("Failed to fetch Resellers.");
+      throw new Error("Failed to fetch product.");
     }
     return response.data as ProductDetailsResponse;
   } catch (e: any) {
@@ -75,24 +75,28 @@ export const setDiscount = async (product_id: string, discount: ProductDiscountM
   }
 };
 
-export const addProductPhoto = async (
-  product_id: string,
-  file: File,
-  fileName: string,
-  order: number
-): Promise<any> => {
+export const addProductPhoto = async (product_id: string, file: File, order: number): Promise<any> => {
   try {
-    const response = await api.post(
-      `/product/${product_id}/photo/${order}`,
-      { file },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "file-name": fileName,
-        },
-      }
-    );
+    const formData = new FormData();
+    formData.append("photo", file);
 
+    const response = await api.post(`/product/${product_id}/photo/${order}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (e: any) {
+    return {
+      error: e.response?.data?.error || e.message,
+    };
+  }
+};
+
+export const addSizeToProduct = async (product_id: string, size_id: string): Promise<any> => {
+  try {
+    const response = await api.patch(`/product/${product_id}/size/${size_id}`);
     return response.data;
   } catch (e: any) {
     return {

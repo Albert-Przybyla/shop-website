@@ -17,6 +17,7 @@ export interface ProductDetailsResponse {
   created_at: string;
   updated_at: string;
   photos: Photo[];
+  sizes: SizeResponse[];
 }
 
 export interface Photo {
@@ -41,7 +42,35 @@ export interface OrderResponse {
   postal_code: string;
   city: string;
   country: string;
-  products: any;
+  delivery_method: DeliveryMethodResponse;
+  delivery_method_additional_info: string;
+  note: string;
+  products: OrderProductResponse[];
   created_at: string;
   updated_at: string;
+}
+
+export interface SizeResponse {
+  id: string;
+  label: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DeliveryMethodResponse {
+  id: string;
+  name: string;
+  price: number;
+  additional_info_label?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderProductResponse {
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  size_id: string;
+  size: SizeResponse;
+  product: ProductResponse;
 }

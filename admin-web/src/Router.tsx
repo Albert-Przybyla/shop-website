@@ -2,8 +2,10 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "./pages/app/HomePage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import MainLayout from "./layouts/MainLayout.tsx";
-import OrdersPage from "./pages/app/ordersPage.tsx";
+import OrdersPage from "./pages/app/OrdersPage.tsx";
 import ProductsPage from "./pages/app/ProductsPage.tsx";
+import SizePage from "./pages/app/SizePage.tsx";
+import DeliveryMethodPage from "./pages/app/DeliveryMethodPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,16 @@ const router = createBrowserRouter([
       {
         path: "products",
         element: <ProductsPage />,
+        handle: { title: "HOME", backPath: null },
+      },
+      {
+        path: "sizes",
+        element: <SizePage />,
+        handle: { title: "HOME", backPath: null },
+      },
+      {
+        path: "delivery-methods",
+        element: <DeliveryMethodPage />,
         handle: { title: "HOME", backPath: null },
       },
     ],

@@ -47,9 +47,13 @@ func (s *Postgres) Init() error {
 func (s *Postgres) Migrate() error {
 	err := s.db.AutoMigrate(
 		&model.Order{},
+		&model.OrderProduct{},
 		&model.Product{},
 		&model.Admin{},
 		&model.ProductPhoto{},
+		&model.Size{},
+		&model.DeliveryMethod{},
+		&model.OrderReturn{},
 	)
 
 	if err != nil {

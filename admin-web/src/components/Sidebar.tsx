@@ -9,7 +9,19 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { BadgeCheck, Bell, Box, ChevronsUpDown, CreditCard, FileText, Home, LogOut, Sparkles } from "lucide-react";
+import {
+  BadgeCheck,
+  Bell,
+  Box,
+  ChevronsUpDown,
+  CreditCard,
+  FileText,
+  Home,
+  LogOut,
+  Shirt,
+  Sparkles,
+  Truck,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,14 +57,24 @@ export function Sidebar() {
       title: "Produkty",
       url: "/app/products",
     },
+    {
+      icon: Shirt,
+      title: "Rozmiary",
+      url: "/app/sizes",
+    },
+    {
+      icon: Truck,
+      title: "Metody dostawy",
+      url: "/app/delivery-methods",
+    },
   ];
   return (
     <SCSidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenuButton size="lg" className="py-2">
-          <img src="/img/logo.avif" alt="logo" className="h-8 w-8" />
+          <img src="/images/logo-max.png" alt="logo" className="h-9 w-9" />
           <div className="grid flex-1 text-left leading-tight">
-            <h1 className="truncate text-lg font-semibold">ProxyVenture</h1>
+            <h1 className="truncate text-lg font-semibold">BlueElephant</h1>
             <p className="truncate text-xs text-muted-foreground">Admin Panel</p>
           </div>
         </SidebarMenuButton>
@@ -134,7 +156,7 @@ export function Sidebar() {
             <DropdownMenuItem
               onClick={() => {
                 logout();
-                router("/login");
+                router("/");
               }}
             >
               <LogOut />

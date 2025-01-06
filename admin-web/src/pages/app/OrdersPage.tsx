@@ -16,7 +16,7 @@ const OrdersPage = () => {
   }, [page.current_page]);
 
   const getData = async () => {
-    const ans = await fetchOrders(1, 10);
+    const ans = await fetchOrders(page.current_page, 10);
     if ("error" in ans) {
       console.log(ans.error);
       return;
@@ -47,6 +47,25 @@ const OrdersPage = () => {
               </AccordionItem>
             ))}
           </Accordion>
+          <div>
+            {page.current_page > 1 && (
+              <button
+                className="m-2 rounded-md border border-input bg-transparent px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                onClick={() => setPage(new PaginationData(page.current_page - 1, page.total_items, page.total_pages))}
+              >
+                Poprzednia
+              </button>
+            )}
+            {page.current_page} / {page.total_pages}
+            {page.current_page < page.total_pages && (
+              <button
+                className="m-2 rounded-md border border-input bg-transparent px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                onClick={() => setPage(new PaginationData(page.current_page + 1, page.total_items, page.total_pages))}
+              >
+                Następna
+              </button>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>

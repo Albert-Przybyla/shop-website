@@ -27,6 +27,10 @@ type Config struct {
 	UserPort       string
 	AdminPort      string
 	JWTSecret      string
+	SMTPHost       string
+	SMTPPort       string
+	SMTPUser       string
+	SMTPPassword   string
 }
 
 func LoadConfig() error {
@@ -59,6 +63,11 @@ func loadConfig() error {
 		AdminPort: os.Getenv("ADMIN_PORT"),
 
 		JWTSecret: os.Getenv("JWT_SECRET"),
+
+		SMTPHost:     os.Getenv("SMTP_HOST"),
+		SMTPPort:     os.Getenv("SMTP_PORT"),
+		SMTPUser:     os.Getenv("SMTP_USER"),
+		SMTPPassword: os.Getenv("SMTP_PASSWORD"),
 	}
 
 	return nil

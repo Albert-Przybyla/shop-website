@@ -6,4 +6,7 @@ func (a *APIServer) Routes() {
 
 	a.engine.POST("/order", a.CreateOrder)
 	a.engine.PATCH("/order/:id/verify", a.VerifyOrder)
+	a.engine.GET("/order/:id/status", a.CheckOrderStatus)
+
+	a.engine.GET("/delivery-method", a.GetDeliveryMethods)
 }

@@ -7,8 +7,11 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useDialog } from "@/contexts/DialogContext";
 import ProductForm from "@/forms/ProductForm";
-import { BadgePercent, Edit2 } from "lucide-react";
+import { BadgePercent, Edit2, Plus } from "lucide-react";
 import ProductDiscountForm from "@/forms/ProductDiscountForm";
+import ModalImage from "react-modal-image";
+import AddSizeToProductForm from "@/forms/AddSizeToProductForm";
+import { Badge } from "./ui/badge";
 
 type Props = {
   id: string;
@@ -33,7 +36,7 @@ const ProductDetails = ({ id }: Props) => {
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const ans = await addProductPhoto(id, event.target.files[0], event.target.files[0].name, 1);
+      const ans = await addProductPhoto(id, event.target.files[0], 1);
       console.log(ans);
     }
   };
@@ -57,7 +60,7 @@ const ProductDetails = ({ id }: Props) => {
                 }
               }}
             >
-              <Edit2 /> Dodaj produkt
+              <Edit2 /> Edytuj produkt
             </Button>
             <Button
               variant="outline"
@@ -132,7 +135,42 @@ const ProductDetails = ({ id }: Props) => {
         <CardContent>
           <div>
             {product?.photos.map((photo) => (
-              <img src={photo.url} alt={photo.url} className="w-32 h-32" />
+              <div key={photo.id}>
+                <ModalImage small={photo.url + "?w=200&h=200"} large={photo.url} alt="zdjecie" />;
+              </div>
+            ))}
+          </div>
+          {/* <div className="flex flex-row gap-2">{product && <ProductSlider photos={product?.photos} />}</div> */}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Rozmiary produktu</CardTitle>
+          <CardButtons>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                const ans = await showDialog({
+                  title: "Dodaj rozmiar",
+                  content: AddSizeToProductForm,
+                  elementId: id,
+                  data: {},
+                });
+                if (ans) {
+                  getData();
+                }
+              }}
+            >
+              <Plus /> Dodaj rozmiar
+            </Button>
+          </CardButtons>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-row gap-2">
+            {product?.sizes.map((size) => (
+              <Badge key={size.id} variant="secondary" className="text-center">
+                <h2 className="text-xl ps-2 min-w-[130px]">{size.label}</h2>
+              </Badge>
             ))}
           </div>
         </CardContent>

@@ -15,7 +15,7 @@ const MainLayout = () => {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
         </header>
-        <main className="p-4 h-[100%] overflow-hidden">
+        <main className="p-4 h-[100%] overflow-scroll">
           <Outlet />
         </main>
       </SidebarInset>

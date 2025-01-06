@@ -10,6 +10,7 @@ import React from "react";
 import { Autoplay, EffectFade, Scrollbar } from "swiper/modules";
 
 const Slider = () => {
+  const images = ["/images/slide-1.jpg", "/images/slide-2.jpg", "/images/slide-3.jpg"];
   return (
     <motion.div initial={{ opacity: 0.9 }} animate={{ opacity: 1 }}>
       <Swiper
@@ -26,20 +27,18 @@ const Slider = () => {
           disableOnInteraction: false,
         }}
         modules={[Autoplay, EffectFade, Scrollbar]}
-        className="w-full overflow-hidden min-h-[50vh] h-[500px] max-h-[6 0vh]"
+        className="w-full overflow-hidden min-h-[50vh] h-[500px] max-h-[60vh]"
       >
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" className="w-full" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" className="w-full" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" className="w-full" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" className="w-full" />
-        </SwiperSlide>
+        {images.map((slide, index) => (
+          <SwiperSlide
+            key={index}
+            style={{
+              backgroundImage: `url(${slide})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          ></SwiperSlide>
+        ))}
       </Swiper>
     </motion.div>
   );

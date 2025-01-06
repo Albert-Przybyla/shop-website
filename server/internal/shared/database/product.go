@@ -40,28 +40,56 @@ func (p *Postgres) SetDiscount(id string, discount int) error {
 	return nil
 }
 
-func (p *Postgres) GetProducts(pageSize, pageNumber int) (model.PagedListResponse[model.ProductAdminResponse], error) {
+func (p *Postgres) GetProducts(pageSize, pageNumber int) (model.PagedListResponse[model.Product], error) {
 
 	var products []model.Product
 	res := p.db.Limit(pageSize).Offset((pageNumber - 1) * pageSize).Find(&products)
 	if res.Error != nil {
-		return model.PagedListResponse[model.ProductAdminResponse]{}, res.Error
+		return model.PagedListResponse[model.Product]{}, res.Error
 	}
 
 	var totalItems int64
 	p.db.Model(&model.Product{}).Count(&totalItems)
 	totalPages := int((totalItems + int64(pageSize) - 1) / int64(pageSize))
 
-	var productResponses []model.ProductAdminResponse
+	response := model.PagedListResponse[model.Product]{
+		Items:       products,
+		TotalItems:  int(totalItems),
+		TotalPages:  totalPages,
+		CurrentPage: pageNumber,
+	}
+
+	return response, nil
+}
+
+func (p *Postgres) GetProductsForUser(pageSize, pageNumber int) (model.PagedListResponse[model.ProductUserResponse], error) {
+
+	var products []model.Product
+	res := p.db.Preload("Photos").Limit(pageSize).Offset((pageNumber - 1) * pageSize).Find(&products)
+	if res.Error != nil {
+		return model.PagedListResponse[model.ProductUserResponse]{}, res.Error
+	}
+
+	var totalItems int64
+	p.db.Model(&model.Product{}).Count(&totalItems)
+	totalPages := int((totalItems + int64(pageSize) - 1) / int64(pageSize))
+
+	var productResponses []model.ProductUserResponse
 	for _, product := range products {
-		productResponses = append(productResponses, model.ProductAdminResponse{
-			ID:          product.Id,
-			Name:        product.Name,
-			Description: product.Description,
+		productResponses = append(productResponses, model.ProductUserResponse{
+			ID:                   product.Id,
+			Name:                 product.Name,
+			Description:          product.Description,
+			AditionalDescription: product.AditionalDescription,
+			Material:             product.Material,
+			Price:                product.Price,
+			Discount:             product.Discount,
+			Photos:               product.Photos,
+			Sizes:                product.Sizes,
 		})
 	}
 
-	response := model.PagedListResponse[model.ProductAdminResponse]{
+	response := model.PagedListResponse[model.ProductUserResponse]{
 		Items:       productResponses,
 		TotalItems:  int(totalItems),
 		TotalPages:  totalPages,
@@ -73,7 +101,7 @@ func (p *Postgres) GetProducts(pageSize, pageNumber int) (model.PagedListRespons
 
 func (p *Postgres) GetProductById(id string) (*model.Product, error) {
 	var product model.Product
-	res := p.db.Preload("Photos").Where("id = ?", id).First(&product)
+	res := p.db.Preload("Photos").Preload("Sizes").Where("id = ?", id).First(&product)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return nil, res.Error
@@ -88,5 +116,26 @@ func (p *Postgres) AddPhotoToProduct(photo *model.ProductPhoto) error {
 	if res.Error != nil {
 		return res.Error
 	}
+	return nil
+}
+
+func (p *Postgres) AddSizeToProduct(productId, sizeId string) error {
+	var product model.Product
+	res := p.db.Preload("Photos").Preload("Sizes").Where("id = ?", productId).First(&product)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return res.Error
+		}
+		return res.Error
+	}
+
+	product.Sizes = append(product.Sizes, model.Size{
+		Id: sizeId,
+	})
+	res = p.db.Save(&product)
+	if res.Error != nil {
+		return res.Error
+	}
+
 	return nil
 }

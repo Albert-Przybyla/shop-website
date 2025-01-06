@@ -23,10 +23,11 @@ func (a *APIServer) GetProducts(c *gin.Context) {
 		return
 	}
 
-	items, err := a.db.GetProducts(pageSizeInt, pageNumberInt)
+	items, err := a.db.GetProductsForUser(pageSizeInt, pageNumberInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, items)
 }

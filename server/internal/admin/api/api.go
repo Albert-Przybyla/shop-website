@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"server/internal/shared/config"
 	"server/internal/shared/database"
+	"server/internal/shared/mailer"
 
 	minio_conf "server/internal/shared/minio"
 
@@ -15,6 +16,7 @@ type APIServer struct {
 	db     *database.Postgres
 	minio  *minio_conf.MinioStorage
 	engine *gin.Engine
+	mailer *mailer.Mailer
 }
 
 func New() *APIServer {
@@ -23,6 +25,7 @@ func New() *APIServer {
 		engine: gin.New(),
 		minio:  minio_conf.New(),
 		port:   config.AppConfig.AdminPort,
+		mailer: mailer.New(),
 	}
 }
 

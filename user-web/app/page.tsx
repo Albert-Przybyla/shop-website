@@ -1,8 +1,8 @@
 import { fetchProducts } from "@/api/product";
 import FloatingButton from "@/components/FloatingButton";
-import Products from "@/components/products";
+import Products from "@/components/Products";
 import Slider from "@/components/Slider";
-import { PagedResponse } from "@/models/pagedResponse.model";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
@@ -14,6 +14,19 @@ export default function Home() {
         <Products />
       </div>
       <FloatingButton />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </>
   );
 }

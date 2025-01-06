@@ -3,9 +3,9 @@ package minio
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"log"
 	"server/internal/shared/config"
-	"time"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -82,7 +82,6 @@ func (s *MinioStorage) GetClient() *minio.Client {
 func (s *MinioStorage) UploadFile(bucketName, objectName string, fileData []byte, contentType string) (string, error) {
 	log.Printf("Uploading file to bucket: %s, object name: %s", bucketName, objectName)
 
-	// Wgrywanie pliku
 	_, err := s.client.PutObject(
 		context.Background(),
 		bucketName,
@@ -96,16 +95,8 @@ func (s *MinioStorage) UploadFile(bucketName, objectName string, fileData []byte
 		return "", err
 	}
 
-	// Generowanie URL-a (czas ważności: 3600 sekund = 1 godzina)
-	expiry := time.Duration(3600) * time.Second // 1 godzina
-	ctx, cancel := context.WithTimeout(context.Background(), expiry)
-	defer cancel()
+	endpoint := s.client.EndpointURL().String()
+	url := fmt.Sprintf("%s/%s/%s", endpoint, bucketName, objectName)
 
-	url, err := s.client.PresignedGetObject(ctx, bucketName, objectName, time.Hour, nil)
-	if err != nil {
-		log.Printf("Failed to generate presigned URL: %v", err)
-		return "", err
-	}
-
-	return url.String(), nil
+	return url, nil
 }

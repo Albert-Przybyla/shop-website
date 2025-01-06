@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (a *APIServer) createProduct(c *gin.Context) {
+func (a *APIServer) CreateProduct(c *gin.Context) {
 
 	var req model.ProductRequest
 
@@ -68,9 +68,6 @@ func (a *APIServer) GetProductById(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	for i := range product.Photos {
-		product.Photos[i].Url = "http://localhost:9000/images/" + product.Photos[i].Url
-	}
 	c.JSON(http.StatusOK, product)
 }
 
@@ -93,25 +90,26 @@ func (a *APIServer) AddPhotoToProduct(c *gin.Context) {
 	id := c.Param("id")
 	order := c.Param("order")
 
-	fileData, err := ioutil.ReadAll(c.Request.Body)
+	file, err := c.FormFile("photo")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request body"})
-		return
-	}
-	defer c.Request.Body.Close()
-
-	contentType := c.GetHeader("Content-Type")
-	if contentType == "" {
-		contentType = "application/octet-stream"
-	}
-
-	fileName := c.GetHeader("File-Name")
-	if fileName == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "File-Name header is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to retrieve file"})
 		return
 	}
 
-	ext := filepath.Ext(fileName)
+	fileData, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file"})
+		return
+	}
+	defer fileData.Close()
+
+	buffer, err := ioutil.ReadAll(fileData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file data"})
+		return
+	}
+
+	ext := filepath.Ext(file.Filename)
 	if ext == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file name or missing extension"})
 		return
@@ -120,8 +118,12 @@ func (a *APIServer) AddPhotoToProduct(c *gin.Context) {
 	objectName := fmt.Sprintf("%s%s", uuid.NewString(), ext)
 
 	bucketName := "images"
-	_, err = a.minio.UploadFile(bucketName, objectName, fileData, contentType)
+	contentType := file.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
 
+	url, err := a.minio.UploadFile(bucketName, objectName, buffer, contentType)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file"})
 		return
@@ -134,14 +136,26 @@ func (a *APIServer) AddPhotoToProduct(c *gin.Context) {
 
 	err = a.db.AddPhotoToProduct(&model.ProductPhoto{
 		ProductId: id,
-		Url:       objectName,
+		Url:       url,
 		Order:     orderInt,
 	})
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add photo"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Photo added successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Photo added successfully", "url": url})
+}
+
+func (a *APIServer) AddSizeToProduct(c *gin.Context) {
+	id := c.Param("id")
+	size_id := c.Param("size_id")
+
+	err := a.db.AddSizeToProduct(id, size_id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Size added successfully"})
 }

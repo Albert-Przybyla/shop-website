@@ -1,14 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardButtons, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchOrder } from "@/api/order";
 import { OrderResponse } from "@/types/types.response";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useDialog } from "@/contexts/DialogContext";
+import { Button } from "./ui/button";
+import OrderStatusForm from "@/forms/OrderStatusForm";
+import { Play, XCircle } from "lucide-react";
+import OrderCancelationForm from "@/forms/OrderCancelationForm";
 
 type Props = {
   id: string;
 };
 
 const OrderDetails = ({ id }: Props) => {
+  const { showDialog } = useDialog();
   const [order, setOrder] = useState<OrderResponse | undefined>();
 
   useEffect(() => {
@@ -28,8 +35,47 @@ const OrderDetails = ({ id }: Props) => {
       <Card>
         <CardHeader>
           <CardTitle>Dane Zamówienia</CardTitle>
+          <CardButtons>
+            {order?.status !== "unverified" && (
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  const ans = await showDialog({
+                    title: "Zaktualizuj status zamówienia",
+                    content: OrderStatusForm,
+                    elementId: id,
+                    data: { status: order?.status },
+                  });
+                  if (ans) {
+                    getData();
+                  }
+                }}
+              >
+                <Play /> Zaktualizuj status zamówienia
+              </Button>
+            )}
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                const ans = await showDialog({
+                  title: "Adnuluj zamówienie",
+                  content: OrderCancelationForm,
+                  elementId: id,
+                });
+                if (ans) {
+                  getData();
+                }
+              }}
+            >
+              <XCircle /> Adnuluj zamówienie
+            </Button>
+          </CardButtons>
         </CardHeader>
-        <CardContent className="flex flex-row gap-4">
+        <CardContent className="flex flex-row gap-6 flex-wrap">
+          <div className="space-y-0.5">
+            <small>ID</small>
+            {order ? <h2 className="pt-1 ps-2 min-w-[130px]">{order.id}</h2> : <Skeleton className="h-8 w-[130px]" />}
+          </div>
           <div className="space-y-0.5">
             <small>Email klienta</small>
             {order ? (
@@ -74,6 +120,32 @@ const OrderDetails = ({ id }: Props) => {
               <Skeleton className="h-8 w-[130px]" />
             )}
           </div>
+          <div className="space-y-0.5">
+            <small>Wysylka</small>
+            {order ? (
+              <h2 className="text-xl ps-2 min-w-[130px]">
+                {order.delivery_method.name} {order.delivery_method.price} PLN
+              </h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <small>Dodatkowe informacje ({order?.delivery_method.additional_info_label || "Nie dotyczy"}) </small>
+            {order ? (
+              <h2 className="text-xl ps-2 min-w-[130px]">{order.delivery_method_additional_info || "---"}</h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <small>Notatki </small>
+            {order ? (
+              <h2 className="text-xl ps-2 min-w-[130px]">{order.note}</h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
         </CardContent>
       </Card>
       <Card>
@@ -82,9 +154,28 @@ const OrderDetails = ({ id }: Props) => {
         </CardHeader>
         <CardContent>
           <div>
-            {order?.products.map((product) => (
-              <div>{product.name}</div>
-            ))}
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nazwa Produktu</TableHead>
+                  <TableHead>Cena jednostkowa</TableHead>
+                  <TableHead>Ilość</TableHead>
+                  <TableHead>Rozmiar</TableHead>
+                  <TableHead>Wartość</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {order?.products.map((product, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{product.product.name}</TableCell>
+                    <TableCell>{product.product.price} PLN</TableCell>
+                    <TableCell>{product.quantity}</TableCell>
+                    <TableCell>{product.size.label}</TableCell>
+                    <TableCell className="font-bold">{product.product.price * product.quantity} PLN</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

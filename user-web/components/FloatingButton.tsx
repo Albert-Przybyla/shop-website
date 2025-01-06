@@ -9,9 +9,10 @@ const FloatingButton = () => {
       initial={{ x: "-150%", opacity: 0.6 }}
       animate={{ x: "0%", opacity: 1 }}
       type="button"
-      className="fixed left-3 bottom-3 instagram rounded-full p-3"
+      className="fixed left-3 bottom-3 instagram rounded-full p-4"
+      onClick={() => (window.location.href = "https://www.instagram.com/blueelephantt_?igsh=Mm9tODhscnk2YzJm")}
     >
-      <InstagramIcon className="text-background" />
+      <InstagramIcon className="text-background" width={30} height={30} />
     </motion.button>
   );
 };

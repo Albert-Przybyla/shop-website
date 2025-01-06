@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"server/internal/shared/config"
 	"server/internal/shared/database"
+	"server/internal/shared/mailer"
 
 	// minio_conf "server/internal/shared/minio"
 
@@ -15,6 +16,7 @@ type APIServer struct {
 	db   *database.Postgres
 	// minio  *minio_conf.MinioStorage
 	engine *gin.Engine
+	mailer *mailer.Mailer
 }
 
 func New() *APIServer {
@@ -22,7 +24,8 @@ func New() *APIServer {
 		db:     database.New(),
 		engine: gin.New(),
 		// minio:  minio_conf.New(),
-		port: config.AppConfig.UserPort,
+		port:   config.AppConfig.UserPort,
+		mailer: mailer.New(),
 	}
 }
 
@@ -35,7 +38,7 @@ func (a *APIServer) Start() {
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST,PATCH, PUT, DELETE, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
 
 		if c.Request.Method == "OPTIONS" {
