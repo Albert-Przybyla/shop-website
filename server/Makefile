@@ -10,11 +10,11 @@ build-user:
 	git pull
 	docker build --build-arg VERSION=$(v) -t shop-user-api:$(v) -f ./dockerfile.user .
 	docker rm -f shop-user-api
-	docker run -d -p 8080:8080 --name shop-user-api shop-user-api:$(v)
+	docker run -d -p 8081:9005 --name shop-user-api shop-user-api:$(v)
 
 
 build-admin:
 	git pull
 	docker build --build-arg VERSION=$(v) -t shop-admin-api:$(v) -f ./dockerfile.admin .
 	docker rm -f shop-admin-api
-	docker run -d -p 8080:8080 --name shop-admin-api shop-admin-api:$(v)
+	docker run -d -p 8080:9006 --name shop-admin-api shop-admin-api:$(v)
