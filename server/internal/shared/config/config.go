@@ -20,7 +20,6 @@ type Config struct {
 	DBPass         string
 	DBName         string
 	MinioHost      string
-	MinioPort      string
 	MinioAccessKey string
 	MinioSecretKey string
 	MinioUseSSL    bool
@@ -54,7 +53,6 @@ func loadConfig() error {
 		DBName: os.Getenv("DB_DB"),
 
 		MinioHost:      os.Getenv("MINIO_HOST"),
-		MinioPort:      os.Getenv("MINIO_PORT"),
 		MinioAccessKey: os.Getenv("MINIO_ACCESS_KEY"),
 		MinioSecretKey: os.Getenv("MINIO_SECRET_KEY"),
 		MinioUseSSL:    os.Getenv("MINIO_USE_SSL") == "true",

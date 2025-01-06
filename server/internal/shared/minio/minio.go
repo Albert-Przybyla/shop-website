@@ -16,7 +16,7 @@ type MinioStorage struct {
 }
 
 func New() *MinioStorage {
-	endpoint := config.AppConfig.MinioHost + ":" + config.AppConfig.MinioPort
+	endpoint := config.AppConfig.MinioHost
 	accessKey := config.AppConfig.MinioAccessKey
 	secretKey := config.AppConfig.MinioSecretKey
 	useSSL := config.AppConfig.MinioUseSSL
