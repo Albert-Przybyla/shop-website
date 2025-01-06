@@ -1,5 +1,6 @@
 import { orderStatus } from "@/api/order";
 import VeryficationForm from "@/forms/VeryficationForm";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{
@@ -9,7 +10,14 @@ interface Props {
 
 const Page = async ({ params }: Props) => {
   const { order_id } = await params;
-  const status = await orderStatus(order_id);
+  let status: {
+    status: string;
+  };
+  try {
+    status = await orderStatus(order_id);
+  } catch {
+    return notFound();
+  }
   return (
     <div className="container mx-auto flex justify-center items-center py-[100px]">
       {status.status === "unverified" ? (

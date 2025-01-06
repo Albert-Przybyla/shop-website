@@ -10,7 +10,7 @@ export const fetchProducts = async (page: number = 1, pageSize: number = 10): Pr
       timestamp: new Date().getTime(),
     },
     headers: {
-      "Cache-Control": "no-store",
+      "Cache-Control": "no-cache",
     },
   });
   return response.data;

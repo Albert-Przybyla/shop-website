@@ -11,11 +11,11 @@ const MobileNav = () => {
   };
   return (
     <>
-      <button onClick={toggleMenu} className="md:hidden text-xl focus:outline-none z-[101] mr-5">
+      <button onClick={toggleMenu} className="md:hidden text-xl focus:outline-none z-[3] mr-5">
         <Menu className="text-6xl" />
       </button>
       <nav
-        className={`md:hidden z-[100] h-screen w-screen bg-[#efe8e8] fixed transition-all duration-300 top-0 left-0 flex flex-col items-center justify-center left space-y-6 text-xl ${
+        className={`md:hidden z-[2] h-screen w-screen bg-[#efe8e8] fixed transition-all duration-300 top-0 left-0 flex flex-col items-center justify-center left space-y-6 text-xl ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

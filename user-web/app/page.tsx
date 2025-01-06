@@ -1,5 +1,3 @@
-import { fetchProducts } from "@/api/product";
-import FloatingButton from "@/components/FloatingButton";
 import Products from "@/components/Products";
 import Slider from "@/components/Slider";
 import { Bounce, ToastContainer } from "react-toastify";
@@ -13,7 +11,6 @@ export default function Home() {
       <div>
         <Products />
       </div>
-      <FloatingButton />
       <ToastContainer
         position="top-right"
         autoClose={5000}

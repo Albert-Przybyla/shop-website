@@ -2,6 +2,7 @@ import { fetchProduct } from "@/api/product";
 import ProductSlider from "@/components/ProductSlider";
 import AddToCartForm from "@/forms/AddToCartForm";
 import { Product } from "@/types/types.response";
+import { notFound } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -12,7 +13,13 @@ interface Props {
 
 const Page = async ({ params }: Props) => {
   const { id } = await params;
-  const product: Product = await fetchProduct(id);
+
+  let product: Product;
+  try {
+    product = await fetchProduct(id);
+  } catch {
+    return notFound();
+  }
   return (
     <div className="container mx-auto my-[100px]">
       <div className="flex flex-col md:flex-row gap-6 px-3">

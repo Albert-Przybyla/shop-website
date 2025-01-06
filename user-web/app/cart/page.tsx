@@ -6,6 +6,7 @@ import { Product } from "@/types/types.response";
 import { fetchProduct } from "@/api/product";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { ExternalLink, Link2, Minus, Plus, SquareArrowOutUpLeft, SquareArrowOutUpRight } from "lucide-react";
 
 type CartItem = {
   product_id: string;
@@ -27,7 +28,13 @@ const Page = () => {
     const cartFromCookie = CartService.getCart();
     const cart: CartItem[] = [];
     for (const item of cartFromCookie) {
-      const res = await fetchProduct(item.product_id);
+      let res: Product;
+      try {
+        res = await fetchProduct(item.product_id);
+      } catch {
+        CartService.removeItem(item.product_id, item.size_id);
+        continue;
+      }
       cart.push({
         product_id: item.product_id,
         quantity: item.quantity,
@@ -57,25 +64,59 @@ const Page = () => {
                   }}
                 />
 
-                <div className="flex-grow space-y-2 ">
-                  <div className="mb-2 flex flex-row justify-between text-xl w-full">
-                    <p>{item.product.name}</p>
-                    <p>{item.product.price * item.quantity} PLN</p>
+                <div className="flex-grow flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="mb-2 flex flex-row justify-between text-xl w-full">
+                      <p>
+                        <span>{item.product.name}</span>
+                        <Link href={`/product/${item.product.id}`}>
+                          <ExternalLink
+                            width={16}
+                            height={16}
+                            className="inline cursor-pointer ml-1 relative bottom-[1px] transition-all duration-300 hover:text-primary"
+                          />
+                        </Link>
+                      </p>
+                      <p>{item.product.price * item.quantity} PLN</p>
+                    </div>
+                    <p>Cena: {item.product.price} PLN</p>
+                    <p>
+                      Rozmiar: {item.product.sizes.find((size) => size.id === item.size_id)?.label || "Brak rozmiaru"}
+                    </p>
                   </div>
-                  <p>Ilość: {item.quantity}</p>
-                  <p>Cena: {item.product.price} PLN</p>
-                  <p>
-                    Rozmiar: {item.product.sizes.find((size) => size.id === item.size_id)?.label || "Brak rozmiaru"}
-                  </p>
-                  <Button
-                    onClick={() => {
-                      CartService.removeItem(item.product_id, item.size_id);
-                      getData();
-                    }}
-                    type="button"
-                  >
-                    Usuń
-                  </Button>
+                  <div className="flex flex-row justify-between pt-3">
+                    <div className="flex flex-row gap-2">
+                      <Button
+                        onClick={() => {
+                          CartService.updateItemQuantity(item.product_id, item.size_id, item.quantity - 1);
+                          getData();
+                        }}
+                        disabled={item.quantity === 1}
+                        type="button"
+                      >
+                        <Minus />
+                      </Button>
+                      <Button type="button">{item.quantity} szt.</Button>
+                      <Button
+                        onClick={() => {
+                          CartService.updateItemQuantity(item.product_id, item.size_id, item.quantity + 1);
+                          getData();
+                        }}
+                        type="button"
+                      >
+                        <Plus width={20} />
+                      </Button>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        CartService.removeItem(item.product_id, item.size_id);
+                        getData();
+                      }}
+                      type="button"
+                    >
+                      Usuń
+                    </Button>
+                  </div>
                 </div>
               </div>
             );

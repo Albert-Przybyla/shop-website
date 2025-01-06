@@ -3,6 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Head from "next/head";
 import "./globals.css";
+import FloatingButton from "@/components/FloatingButton";
 
 export const metadata: Metadata = {
   title: "Blue Elephant",
@@ -60,6 +61,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <Nav />
         {children}
+        <FloatingButton />
         <Footer />
       </body>
     </html>
