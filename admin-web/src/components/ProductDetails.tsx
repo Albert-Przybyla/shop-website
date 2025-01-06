@@ -80,7 +80,7 @@ const ProductDetails = ({ id }: Props) => {
             </Button>
           </CardButtons>
         </CardHeader>
-        <CardContent className="flex flex-row gap-4">
+        <CardContent className="flex flex-row gap-4 flex-wrap">
           <div className="space-y-0.5">
             <small>Nazwa produktu</small>
             {product ? (
@@ -149,10 +149,10 @@ const ProductDetails = ({ id }: Props) => {
           </CardButtons>
         </CardHeader>
         <CardContent>
-          <div>
+          <div className="flex flex-row gap-2 flex-wrap">
             {product?.photos.map((photo) => (
               <div key={photo.id}>
-                <ModalImage small={photo.url + "?w=200&h=200"} large={photo.url} alt="zdjecie" />
+                <ModalImage small={photo.url + "?w=200&h=200"} large={photo.url} alt="zdjecie" className="w-[200px]" />
               </div>
             ))}
           </div>

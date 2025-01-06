@@ -63,7 +63,7 @@ const AdminsPage = () => {
                     <CardHeader>
                       <CardTitle>Administrator</CardTitle>
                     </CardHeader>
-                    <CardContent className="flex flex-row gap-4">
+                    <CardContent className="flex flex-row gap-4 flex-wrap">
                       <div className="space-y-0.5">
                         <small>Imie i nazwisko</small>
                         {admin ? (
