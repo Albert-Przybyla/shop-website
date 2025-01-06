@@ -1,0 +1,13 @@
+FROM golang:1.23-alpine AS build-env
+ARG version
+ADD . /src/shop-admin-api
+WORKDIR /src/shop-admin-api
+RUN go mod vendor
+RUN go build -ldflags "-s -w -X 'main.version=${version}'" -o shop-admin-api ./bin/admin/main.go
+
+FROM alpine:latest
+WORKDIR /app
+COPY .env /app/
+COPY --from=build-env /src/shop-admin-api/shop-admin-api /app/
+
+ENTRYPOINT ["/app/shop-admin-api"]

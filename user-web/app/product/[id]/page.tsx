@@ -5,13 +5,14 @@ import { Product } from "@/types/types.response";
 import React from "react";
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const Page = async ({ params }: Props) => {
-  const product: Product = await fetchProduct(params.id);
+  const { id } = await params;
+  const product: Product = await fetchProduct(id);
   return (
     <div className="container mx-auto my-[100px]">
       <div className="flex flex-col md:flex-row gap-6 px-3">

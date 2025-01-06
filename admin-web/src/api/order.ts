@@ -1,7 +1,6 @@
 import { ErrorResponse, PaginatedApiResponse } from "@/types/base.types";
 import { api } from "./api";
 import { OrderResponse } from "@/types/types.response";
-import { OrderStatusModel } from "@/schemas/OrderStatusSchema";
 
 export const fetchOrders = async (
   page_number: number,

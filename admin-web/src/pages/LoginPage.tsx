@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const LoginPage = () => {
   const router = useNavigate();
-  const { login, user } = useUserContext();
+  const { login } = useUserContext();
   const { toast } = useToast();
 
   const form = useForm<LoginModel>({

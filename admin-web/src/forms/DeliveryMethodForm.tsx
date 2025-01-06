@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ModalProps } from "@/types/base.types";
-import { DeliveryMethodModel, DeliveryMethodSchema } from "@/schemas/deliveryMethodSchema";
+import { DeliveryMethodModel, DeliveryMethodSchema } from "@/schemas/DeliveryMethodSchema";
 import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

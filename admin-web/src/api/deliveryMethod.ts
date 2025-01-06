@@ -1,7 +1,7 @@
 import { ErrorResponse, PaginatedApiResponse } from "@/types/base.types";
 import { DeliveryMethodResponse } from "@/types/types.response";
 import { api } from "./api";
-import { DeliveryMethodModel } from "@/schemas/deliveryMethodSchema";
+import { DeliveryMethodModel } from "@/schemas/DeliveryMethodSchema";
 
 export const fetchDeliveryMethods = async (
   page_number: number,
