@@ -5,8 +5,8 @@ import "swiper/css/scrollbar";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Photo } from "@/types/types.response";
-import { useState } from "react";
-import { Navigation, Pagination } from "swiper/modules";
+import { useRef, useState } from "react";
+import { FreeMode, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Button from "./Button";
 import { X } from "lucide-react";
@@ -48,14 +48,22 @@ const ImageModal = ({ images, openIndex, onClose }: { images: string[]; openInde
 
 const ProductSlider = ({ photos }: { photos: Photo[] }) => {
   const [openModal, setOpenModal] = useState<number | undefined>(undefined);
+  const swiperRef = useRef<any>(null);
+  const handleThumbnailClick = (index: number) => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.slideTo(index);
+    }
+  };
+
   return (
     <>
       <Swiper
+        ref={swiperRef}
         modules={[Pagination, Navigation]}
         pagination={{ clickable: true }}
         spaceBetween={30}
         slidesPerView={1}
-        className="w-[500px] max-w-[60vh] cursor-zoom-in aspect-square"
+        className="w-[500px] max-w-[calc(100%-2rem)] cursor-zoom-in aspect-square"
       >
         {photos.map((image, index) => (
           <SwiperSlide
@@ -65,18 +73,47 @@ const ProductSlider = ({ photos }: { photos: Photo[] }) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-            className="w-[500px] max-w-[60vh] cursor-zoom-in aspect-square"
+            className="cursor-zoom-in aspect-square"
             onClick={() => {
               setOpenModal(index);
             }}
-          ></SwiperSlide>
+          />
         ))}
-        <ImageModal
-          images={photos.map((image) => image.url)}
-          openIndex={openModal}
-          onClose={() => setOpenModal(undefined)}
-        />
       </Swiper>
+      <div className="flex flex-row mt-4 justify-center w-full px-3">
+        <Swiper
+          modules={[Scrollbar, FreeMode]}
+          freeMode={true}
+          slidesPerView={"auto"}
+          spaceBetween={5}
+          className="h-[100px] cursor-pointer"
+          scrollbar={{
+            hide: true,
+          }}
+        >
+          {photos.map((image, index) => (
+            <SwiperSlide
+              key={index}
+              onClick={() => handleThumbnailClick(index)}
+              style={{ width: "100px", marginRight: "5px" }}
+            >
+              <div
+                style={{
+                  backgroundImage: `url(${image.url})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+                className="cursor-pointer aspect-square h-[100px] w-[100px]"
+              ></div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      <ImageModal
+        images={photos.map((image) => image.url)}
+        openIndex={openModal}
+        onClose={() => setOpenModal(undefined)}
+      />
     </>
   );
 };

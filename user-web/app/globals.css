@@ -20,7 +20,14 @@
   --toastify-text-color-error: var(--foreground);
   --toastify-toast-bd-radius: 0px;
 }
-
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  border: var(--border) 1px solid !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: var(--background) !important;
+}
 @font-face {
   font-family: "font";
   src: url("/fonts/SourGummy-2.ttf") format("truetype");
