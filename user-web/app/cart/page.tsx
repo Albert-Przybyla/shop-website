@@ -7,6 +7,7 @@ import { fetchProduct } from "@/api/product";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { ExternalLink, Link2, Minus, Plus, SquareArrowOutUpLeft, SquareArrowOutUpRight } from "lucide-react";
+import { toast } from "react-toastify";
 
 type CartItem = {
   product_id: string;
@@ -16,6 +17,7 @@ type CartItem = {
 };
 
 const Page = () => {
+  const notify = () => toast.success("Wow so easy!");
   const [Cart, setCart] = React.useState<CartItem[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -43,7 +45,6 @@ const Page = () => {
       });
     }
     setCart(cart);
-
     setLoading(false);
   };
 

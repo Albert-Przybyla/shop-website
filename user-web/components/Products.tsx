@@ -5,7 +5,6 @@ import NavBtn from "./actions/NavBtn";
 
 const Products = async () => {
   const products: PagedResponse<Product> = await fetchProducts();
-
   return (
     <div className="container mx-auto my-[100px]">
       <h1 className="text-3xl font-bold px-3 text-center">Produkty</h1>

@@ -10,6 +10,15 @@
   --border: #333;
 
   --primary: #5271ff;
+
+  --toastify-font-family: "font", sans-serif;
+  --toastify-color-progress-light: var(--primary);
+  --toastify-text-color-light: var(--foreground);
+  --toastify-text-color-info: var(--foreground);
+  --toastify-text-color-success: var(--foreground);
+  --toastify-text-color-warning: var(--foreground);
+  --toastify-text-color-error: var(--foreground);
+  --toastify-toast-bd-radius: 0px;
 }
 
 @font-face {

@@ -6,7 +6,8 @@ import { Size } from "@/types/types.response";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type Props = {
   product_id: string;
@@ -14,6 +15,8 @@ type Props = {
 };
 
 const AddToCardForm = ({ product_id, sizes }: Props) => {
+  const [cartItemCount, setCartItemCount] = useState<number>(0);
+  const notify = (t: string) => toast(t);
   const form = useForm<AddToCartModel>({
     resolver: zodResolver(AddToCartSchema),
     defaultValues: {
@@ -22,13 +25,25 @@ const AddToCardForm = ({ product_id, sizes }: Props) => {
   });
   const onSubmit = async (values: AddToCartModel) => {
     CartService.addItem(values);
+    notify(`Dodano produkt do koszyka`);
   };
 
   useEffect(() => {
+    setCartItemCount(countCartItems());
     if (sizes && sizes.length === 1) {
       form.setValue("size_id", sizes[0].id);
     }
   }, [sizes]);
+
+  const countCartItems = (): number => {
+    let items = 0;
+    CartService.getCart()
+      .filter((item) => item.product_id === product_id)
+      .forEach((item) => {
+        items += item.quantity;
+      });
+    return items;
+  };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -61,7 +76,7 @@ const AddToCardForm = ({ product_id, sizes }: Props) => {
         </div>
       </div>
       <div className="flex flex-row gap-3 items-center">
-        <Button type="submit">Dodaj do koszyka</Button>
+        <Button type="submit">Dodaj do koszyka&nbsp;{cartItemCount > 0 && <span>({cartItemCount})</span>}</Button>
         <Link href="/cart" className="hover:underline">
           Zobacz koszyk
         </Link>
@@ -71,4 +86,3 @@ const AddToCardForm = ({ product_id, sizes }: Props) => {
 };
 
 export default AddToCardForm;
-//

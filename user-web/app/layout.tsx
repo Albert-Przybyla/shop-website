@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Head from "next/head";
 import "./globals.css";
 import FloatingButton from "@/components/FloatingButton";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Blue Elephant",
@@ -60,6 +61,20 @@ export default function RootLayout({
       </Head>
       <body className={`antialiased`}>
         <Nav />
+        <ToastContainer
+          position="top-right"
+          autoClose={500000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+          toastClassName="bg-background border rounded-none"
+        />
         {children}
         <FloatingButton />
         <Footer />
