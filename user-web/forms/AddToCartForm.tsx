@@ -25,6 +25,7 @@ const AddToCardForm = ({ product_id, sizes }: Props) => {
   });
   const onSubmit = async (values: AddToCartModel) => {
     CartService.addItem(values);
+    setCartItemCount(cartItemCount + values.quantity);
     notify(`Dodano produkt do koszyka`);
   };
 
