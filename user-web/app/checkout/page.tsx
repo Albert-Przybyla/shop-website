@@ -205,7 +205,7 @@ const Page = () => {
                 <div key={index} className="space-y-3">
                   <div className="flex flex-row gap-3 pb-3">
                     <div
-                      className="relative h-[60px] aspect-square"
+                      className="relative h-[100px] aspect-square"
                       style={{
                         backgroundImage: `url(${item.product.photos[0]?.url})`,
                         backgroundSize: "cover",
@@ -217,7 +217,7 @@ const Page = () => {
                         <p>{item.product.name}</p>
                       </div>
                       <p>Ilość: {item.quantity}</p>
-                      <p>Cena: {item.product.price} PLN</p>
+                      <p>Cena za sztuke: {item.product.price} PLN</p>
                       <p>
                         Rozmiar: {item.product.sizes.find((size) => size.id === item.size_id)?.label || "Brak rozmiaru"}
                       </p>
