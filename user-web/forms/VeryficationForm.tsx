@@ -6,24 +6,33 @@ import React, { useState } from "react";
 import OTPInput from "react-otp-input";
 import { VeryficationModel, VeryficationSchema } from "@/schemas/VeryficationSchema";
 import { verifyOrder } from "@/api/order";
+import Loader from "@/components/Loader";
+import { toast } from "react-toastify";
 
 type Props = {
   order_id: string;
 };
 
 const VeryficationForm = ({ order_id }: Props) => {
+  const notify = (t: string) => toast(t);
+  const [loading, setLoading] = React.useState(false);
   const [otp, setOtp] = useState("");
+
   const form = useForm<VeryficationModel>({
     resolver: zodResolver(VeryficationSchema),
   });
   const [error, setError] = useState<string | null>(null);
   const onSubmit = async (values: VeryficationModel) => {
+    setLoading(true);
     const ans = await verifyOrder(order_id, values);
     if ("error" in ans) {
+      notify(ans.error);
       setError(ans.error);
     } else {
+      setError(null);
       window.location.reload();
     }
+    setLoading(false);
   };
   return (
     <form>
@@ -32,8 +41,8 @@ const VeryficationForm = ({ order_id }: Props) => {
         <OTPInput
           value={otp}
           onChange={(code) => {
-            setOtp(code);
             form.setValue("confirmation_code", code);
+            setOtp(code);
             if (code.length === 6) {
               form.handleSubmit(onSubmit)();
             }
@@ -54,6 +63,7 @@ const VeryficationForm = ({ order_id }: Props) => {
           <p>{error}</p>
         </div>
       </div>
+      <Loader loading={loading} />
     </form>
   );
 };
