@@ -23,7 +23,7 @@ const Page = async ({ params }: Props) => {
   return (
     <div className="container mx-auto my-[100px]">
       <div className="flex flex-col md:flex-row gap-6 px-3">
-        <div className="md:w-1/2">
+        <div className="md:w-1/2 flex justify-center items-center">
           <ProductSlider photos={product.photos} />
         </div>
         <div className="md:w-1/2 space-y-6 p-6">

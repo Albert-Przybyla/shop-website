@@ -55,7 +55,7 @@ const ProductSlider = ({ photos }: { photos: Photo[] }) => {
         pagination={{ clickable: true }}
         spaceBetween={30}
         slidesPerView={1}
-        className="w-full min-h-[50vh] h-[500px] max-h-[60vh]"
+        className="w-[500px] max-w-[60vh] cursor-zoom-in aspect-square"
       >
         {photos.map((image, index) => (
           <SwiperSlide
@@ -65,7 +65,7 @@ const ProductSlider = ({ photos }: { photos: Photo[] }) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-            className="w-full overflow-hidden min-h-[50vh] h-[500px] max-h-[60vh] cursor-zoom-in"
+            className="w-[500px] max-w-[60vh] cursor-zoom-in aspect-square"
             onClick={() => {
               setOpenModal(index);
             }}

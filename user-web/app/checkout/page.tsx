@@ -198,7 +198,7 @@ const Page = () => {
             </form>
           </div>
           <div className="xl:w-1/3 space-y-6 border p-3 h-auto xl:sticky top-0">
-            <h3 className="text-2xl font-bold">Podsumowanie zamówienia</h3>
+            <h3 className="text-2xl font-bold ">Podsumowanie zamówienia</h3>
             <hr />
             {cart.map((item, index) => {
               return (
