@@ -52,7 +52,6 @@ const ProductSlider = ({ photos }: { photos: Photo[] }) => {
     <>
       <Swiper
         modules={[Pagination, Navigation]}
-        navigation
         pagination={{ clickable: true }}
         spaceBetween={30}
         slidesPerView={1}

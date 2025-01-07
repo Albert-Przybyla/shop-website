@@ -16,7 +16,6 @@ const Slider = () => {
       <Swiper
         spaceBetween={30}
         effect={"fade"}
-        navigation={true}
         centeredSlides={true}
         loop={true}
         scrollbar={{
