@@ -63,7 +63,7 @@ export default function RootLayout({
         <Nav />
         <ToastContainer
           position="top-right"
-          autoClose={500000}
+          autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}
