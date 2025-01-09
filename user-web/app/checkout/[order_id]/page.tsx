@@ -19,7 +19,7 @@ const Page = async ({ params }: Props) => {
     return notFound();
   }
   return (
-    <div className="container mx-auto flex justify-center items-center py-[100px]">
+    <div className="container mx-auto flex justify-center items-center py-[100px] ">
       {status.status === "unverified" ? (
         <VeryficationForm order_id={order_id} />
       ) : (
@@ -28,7 +28,7 @@ const Page = async ({ params }: Props) => {
           <div className="mt-4 text-center">
             <p>Aby dokończyć transakcję, prosimy o dokonanie płatności.</p>
             <p>o tytule: {order_id}</p>
-            <p>na numer konta: 1234 1234 1234 1234</p>
+            <p>na numer konta: 84 1140 2004 0000 3602 7645 8160</p>
           </div>
         </div>
       )}

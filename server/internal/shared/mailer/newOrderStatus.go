@@ -27,7 +27,7 @@ func (m *Mailer) SendNewOrderStatusEmail(to string, status model.Status, data Ne
 	case "verified":
 		data.Title = "Dziękujemy za złożenie zamowienia!"
 		data.SubTitle = "Dziękujemy za złożenie zamówienia w naszym sklepie. Poniżej znajdują się szczegóły Twojego zamówienia:"
-		data.Article1 = "Twoje zamówienie zostanie przetworzone po zaksięgowaniu wpłaty na konto bankowe o numerze 1234 1234 1234 1234 1234 z tytulem " + data.OrderNumber + "."
+		data.Article1 = "Twoje zamówienie zostanie przetworzone po zaksięgowaniu wpłaty na konto bankowe o numerze 84 1140 2004 0000 3602 7645 8160 z tytulem " + data.OrderNumber + "."
 		data.Article2 = "W razie jakichkolwiek pytań zapraszamy do kontaktu z naszym zespołem wsparcia."
 	case "paid":
 		data.Title = "Dziękujemy za płatność!"

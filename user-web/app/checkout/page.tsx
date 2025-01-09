@@ -183,7 +183,7 @@ const Page = () => {
                 </div>
               </div>
               {selectedDeliveryMethod && selectedDeliveryMethod.additional_info_label ? (
-                <div className="form-box w-1/2">
+                <div className="form-box md:w-1/2">
                   <label htmlFor="additional_info">{selectedDeliveryMethod.additional_info_label}</label>
                   <input id="additional_info" {...form.register("delivery_method_additional_info")} />
                   <div className="errors">
