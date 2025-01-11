@@ -54,7 +54,7 @@ func (a *APIServer) VerifyOrder(c *gin.Context) {
 	}
 
 	if code != req.ConfirmationCode {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid confirmation code"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Nieprawidłowy kod potwierdzający"})
 		return
 	}
 
@@ -76,7 +76,7 @@ func (a *APIServer) VerifyOrder(c *gin.Context) {
 		Name:        order.FirstName + " " + order.LastName,
 		OrderNumber: id,
 		OrderDate:   order.CreatedAt.Format("2006-01-02"),
-		TotalAmount: order.TotalPrice,
+		TotalAmount: order.TotalPrice + float64(order.DeliveryPrice),
 		Title:       "",
 		SubTitle:    "",
 		Article1:    "",

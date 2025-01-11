@@ -70,8 +70,16 @@ const AddToCardForm = ({ product_id, sizes }: Props) => {
           id="quantity"
           {...(form.register("quantity"), { onChange: (e) => form.setValue("quantity", Number(e.target.value)) })}
           type="number"
+          list="quantity-list"
           min={1}
         />
+        <datalist id="quantity-list">
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </datalist>
         <div className="errors">
           <p>{form.formState.errors.quantity?.message}</p>
         </div>

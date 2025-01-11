@@ -35,7 +35,10 @@ const VeryficationForm = ({ order_id }: Props) => {
     setLoading(false);
   };
   return (
-    <form>
+    <form className="space-y-12 flex flex-col items-center">
+      <h3 className="text-2xl font-bold px-3 text-center">
+        Wysłaliśmy kod weryfikacyjny na podany adres e-mail. Podaj go poniżej.
+      </h3>
       <div className="form-box">
         <label>Kod weryfikacjyjny</label>
         <OTPInput

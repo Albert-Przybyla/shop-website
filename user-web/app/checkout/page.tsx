@@ -31,14 +31,15 @@ const Page = () => {
   });
   const onSubmit = async (values: OrderModel) => {
     setLoading(true);
-    const order = await createOrder(values);
-    if ("error" in order) {
-      notify("Bład podczas tworzenia zamówienia: " + order.error);
-    } else if ("id" in order) {
-      CartService.clearCart();
-      notify("Zamówienie zostało złożone!");
-      window.location.href = "/checkout/" + order.id;
-    }
+    console.log(values);
+    // const order = await createOrder(values);
+    // if ("error" in order) {
+    //   notify("Bład podczas tworzenia zamówienia: " + order.error);
+    // } else if ("id" in order) {
+    //   CartService.clearCart();
+    //   notify("Zamówienie zostało złożone!");
+    //   window.location.href = "/checkout/" + order.id;
+    // }
     setLoading(false);
   };
 
@@ -161,11 +162,11 @@ const Page = () => {
                       className="flex flex-row items-center justify-between w-full p-3 border h-12"
                       onClick={() => {
                         form.setValue("delivery_method_id", method.id);
-                        form.setValue("delivery_method_additional_info", undefined);
                         setSelectedDeliveryMethod(method);
                         if (method.additional_info_label) {
                           form.setValue("require_additional_info", true);
                         } else {
+                          form.setValue("delivery_method_additional_info", undefined);
                           form.setValue("require_additional_info", false);
                         }
                       }}

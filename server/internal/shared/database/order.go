@@ -54,21 +54,22 @@ func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateOrde
 	}
 
 	order := model.Order{
-		FirstName:        req.FirstName,
-		LastName:         req.LastName,
-		Email:            req.Email,
-		Phone:            req.Phone,
-		Address:          req.Address,
-		PostalCode:       req.PostalCode,
-		City:             req.City,
-		Country:          req.Country,
-		ConfirmationCode: generateConfirmationCode(),
-		Status:           "unverified",
-		TotalPrice:       totalPrice,
-		DeliveryPrice:    delivery.Price,
-		DeliveryMethodId: req.DeliveryMethodId,
-		Note:             req.Note,
-		Products:         products,
+		FirstName:                    req.FirstName,
+		LastName:                     req.LastName,
+		Email:                        req.Email,
+		Phone:                        req.Phone,
+		Address:                      req.Address,
+		PostalCode:                   req.PostalCode,
+		City:                         req.City,
+		Country:                      req.Country,
+		ConfirmationCode:             generateConfirmationCode(),
+		Status:                       "unverified",
+		TotalPrice:                   totalPrice,
+		DeliveryPrice:                delivery.Price,
+		DeliveryMethodId:             req.DeliveryMethodId,
+		DeliveryMethodAdditionalInfo: req.DeliveryMethodAdditionalInfo,
+		Note:                         req.Note,
+		Products:                     products,
 	}
 
 	res := p.db.Create(&order)

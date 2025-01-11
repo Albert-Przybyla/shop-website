@@ -56,7 +56,7 @@ func (a *APIServer) UpdateOrderStatus(c *gin.Context) {
 		Name:        order.FirstName + " " + order.LastName,
 		OrderNumber: id,
 		OrderDate:   order.CreatedAt.Format("2006-01-02"),
-		TotalAmount: order.TotalPrice,
+		TotalAmount: order.TotalPrice + float64(order.DeliveryPrice),
 		Title:       "",
 		SubTitle:    "",
 		Article1:    "",

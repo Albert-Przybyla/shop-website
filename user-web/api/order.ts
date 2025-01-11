@@ -29,8 +29,9 @@ export const verifyOrder = async (orderId: string, code: VeryficationModel): Pro
     }
     return response.data;
   } catch (e: any) {
+    console.log(e);
     return {
-      error: e.message,
+      error: e.response.data.error,
     };
   }
 };
