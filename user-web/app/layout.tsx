@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import Head from "next/head";
 import "./globals.css";
 import FloatingButton from "@/components/FloatingButton";
 import { Bounce, ToastContainer } from "react-toastify";
-import Script from "next/script";
 import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
@@ -15,6 +13,9 @@ export const metadata: Metadata = {
     "czapki, akcesoria surfingowe, akcesoria, surfing, styl, moda, odzież plażowa, Blue Elephant, surfing, surf",
   icons: {
     icon: {
+      url: "https://blue-elephant.pl/images/logo.png",
+    },
+    shortcut: {
       url: "https://blue-elephant.pl/images/logo.png",
     },
   },
@@ -33,6 +34,11 @@ export const metadata: Metadata = {
         alt: "Logo Blue Elephant",
       },
     ],
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
   },
   twitter: {
     card: "summary_large_image",
@@ -59,17 +65,6 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body className={`antialiased`}>
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-GTM-NHM7NMB8" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-XXXXXXXXXX', {
-              page_path: window.location.pathname,
-            });
-          `}
-        </Script>
         <Nav />
         <ToastContainer
           position="top-right"
