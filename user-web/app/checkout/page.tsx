@@ -31,15 +31,14 @@ const Page = () => {
   });
   const onSubmit = async (values: OrderModel) => {
     setLoading(true);
-    console.log(values);
-    // const order = await createOrder(values);
-    // if ("error" in order) {
-    //   notify("Bład podczas tworzenia zamówienia: " + order.error);
-    // } else if ("id" in order) {
-    //   CartService.clearCart();
-    //   notify("Zamówienie zostało złożone!");
-    //   window.location.href = "/checkout/" + order.id;
-    // }
+    const order = await createOrder(values);
+    if ("error" in order) {
+      notify("Bład podczas tworzenia zamówienia: " + order.error);
+    } else if ("id" in order) {
+      CartService.clearCart();
+      notify("Zamówienie zostało złożone!");
+      window.location.href = "/checkout/" + order.id;
+    }
     setLoading(false);
   };
 
