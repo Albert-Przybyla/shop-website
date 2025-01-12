@@ -6,7 +6,6 @@ import (
 
 type Status string
 
-// RoleAdmin   UserRole = "admin"
 const (
 	Unverified Status = "unverified"
 	Verified   Status = "verified"
@@ -37,7 +36,8 @@ type Order struct {
 	Products                     []OrderProduct `gorm:"foreignKey:OrderId" json:"products"`
 	CreatedAt                    time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt                    time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	Code                         string         `gorm:"foreignKey:Code" json:"code"`
+	OrderCode                    string         `gorm:"type:varchar;nullable" json:"order_code"`
+	Code                         *Code          `gorm:"foreignKey:OrderCode" json:"code"`
 }
 
 type OrderProduct struct {
