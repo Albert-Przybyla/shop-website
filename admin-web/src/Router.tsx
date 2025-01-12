@@ -7,6 +7,7 @@ import ProductsPage from "./pages/app/ProductsPage.tsx";
 import SizePage from "./pages/app/SizePage.tsx";
 import DeliveryMethodPage from "./pages/app/DeliveryMethodPage.tsx";
 import AdminsPage from "./pages/app/AdminsPage.tsx";
+import CodesPage from "./pages/app/CodesPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
       {
         path: "delivery-methods",
         element: <DeliveryMethodPage />,
+        handle: { title: "HOME", backPath: null },
+      },
+      {
+        path: "codes",
+        element: <CodesPage />,
         handle: { title: "HOME", backPath: null },
       },
       {

@@ -9,32 +9,16 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  BadgeCheck,
-  Bell,
-  Box,
-  ChevronsUpDown,
-  CreditCard,
-  FileText,
-  Home,
-  LogOut,
-  Shield,
-  Shirt,
-  Sparkles,
-  Truck,
-} from "lucide-react";
+import { Box, FileText, Home, LogOut, Shield, Shirt, Tag, Truck } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Avatar } from "./ui/avatar";
-
-import { AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/contexts/UserContext";
 
@@ -67,6 +51,11 @@ export function Sidebar() {
       icon: Truck,
       title: "Metody dostawy",
       url: "/app/delivery-methods",
+    },
+    {
+      icon: Tag,
+      title: "Kody promocyjne",
+      url: "/app/codes",
     },
     {
       icon: Shield,
@@ -111,13 +100,10 @@ export function Sidebar() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarFallback className="rounded-lg">US</AvatarFallback>
+              <Avatar className="w-8 h-8">
+                <AvatarFallback>{user?.email[0].toUpperCase()}</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user?.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <span className="truncate">{user?.email}</span>
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -126,38 +112,12 @@ export function Sidebar() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user?.email}</span>
-                </div>
-              </div>
+            <DropdownMenuLabel className="font-normal flex flex-row items-center gap-2">
+              <Avatar className="w-9 h-9">
+                <AvatarFallback>{user?.email[0].toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <span className="truncate">{user?.email}</span>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {

@@ -37,6 +37,7 @@ type Order struct {
 	Products                     []OrderProduct `gorm:"foreignKey:OrderId" json:"products"`
 	CreatedAt                    time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt                    time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	Code                         string         `gorm:"foreignKey:Code" json:"code"`
 }
 
 type OrderProduct struct {

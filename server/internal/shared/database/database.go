@@ -54,6 +54,7 @@ func (s *Postgres) Migrate() error {
 		&model.Size{},
 		&model.DeliveryMethod{},
 		&model.OrderReturn{},
+		&model.Code{},
 	)
 
 	if err != nil {

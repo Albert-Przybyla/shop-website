@@ -27,4 +27,9 @@ func (a *APIServer) Routes() {
 	a.engine.GET("/delivery-method", a.validateToken(), a.GetDeliveryMethods)
 	a.engine.GET("/delivery-method/:id", a.validateToken(), a.GetDeliveryMethodById)
 	a.engine.PUT("/delivery-method/:id", a.validateToken(), a.UpdateDeliveryMethod)
+
+	a.engine.POST("/code", a.validateToken(), a.CreateCode)
+	a.engine.GET("/code", a.validateToken(), a.GetCodes)
+	a.engine.GET("/code/:code/exists", a.validateToken(), a.IsCodeExists)
+	a.engine.PATCH("/code/:code/toggle", a.validateToken(), a.ToggleActiveCode)
 }

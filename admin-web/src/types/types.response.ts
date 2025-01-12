@@ -85,3 +85,16 @@ export interface OrderProductResponse {
   size: SizeResponse;
   product: ProductResponse;
 }
+
+export interface CodeResponse {
+  code: string;
+  value: number;
+  max_uses: number;
+  uses: number;
+  description: string;
+  is_active: boolean;
+  expiration: string;
+  show_on_page: boolean;
+  updated_at: string;
+  created_at: string;
+}
