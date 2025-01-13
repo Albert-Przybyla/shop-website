@@ -81,6 +81,7 @@ form {
   @apply outline-none;
   @apply focus:border-primary;
   @apply focus:shadow-md;
+  border-radius: 0px !important;
 }
 
 .form-box input,
