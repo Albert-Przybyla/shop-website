@@ -3,9 +3,12 @@ import { api } from "./api";
 import { CreateResponse, ErrorResponse } from "@/types/base.types";
 import { VeryficationModel } from "@/schemas/VeryficationSchema";
 
-export const createOrder = async (order: OrderModel): Promise<CreateResponse | ErrorResponse> => {
+export const createOrder = async (order: OrderModel, code?: string | null): Promise<CreateResponse | ErrorResponse> => {
   try {
-    const response = await api.post(`/order`, order);
+    const response = await api.post(`/order`, {
+      ...order,
+      code: code,
+    });
     if (response.status !== 200) {
       return {
         error: "Something went wrong",

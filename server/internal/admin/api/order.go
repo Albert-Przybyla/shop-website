@@ -52,11 +52,16 @@ func (a *APIServer) UpdateOrderStatus(c *gin.Context) {
 		return
 	}
 
+	TotalAmount := order.TotalPrice + order.DeliveryPrice
+	if order.Code != nil {
+		TotalAmount -= order.TotalPrice * order.Code.Value / 100
+	}
+
 	emailData := mailer.NewOrderStatusEmail{
 		Name:        order.FirstName + " " + order.LastName,
 		OrderNumber: id,
 		OrderDate:   order.CreatedAt.Format("2006-01-02"),
-		TotalAmount: order.TotalPrice + float64(order.DeliveryPrice),
+		TotalAmount: float64(TotalAmount) / 100,
 		Title:       "",
 		SubTitle:    "",
 		Article1:    "",

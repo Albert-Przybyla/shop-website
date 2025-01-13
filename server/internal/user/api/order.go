@@ -12,15 +12,31 @@ func (a *APIServer) CreateOrder(c *gin.Context) {
 	var req model.CreateOrderRequest
 
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Tworzenie zamówienia nie powiodło się", "success": false})
 		return
+	}
+
+	if req.Code != nil {
+		err := a.ValidateCode(*req.Code)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "success": false})
+			return
+		}
 	}
 
 	res, err := a.db.CreateOrder(&req)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Tworzenie zamówienia nie powiodło się", "success": false})
 		return
+	}
+
+	if req.Code != nil {
+		err := a.db.UseCode(*req.Code)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Tworzenie zamówienia nie powiodło się", "success": false})
+			return
+		}
 	}
 
 	emailData := mailer.VerificationEmail{
@@ -29,11 +45,11 @@ func (a *APIServer) CreateOrder(c *gin.Context) {
 	}
 	mail_err := a.mailer.SendVerificationCode(req.Email, emailData)
 	if mail_err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send email"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Tworzenie zamówienia nie powiodło się", "success": false})
 		return
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, gin.H{"message": "Stworzono zamówienie", "success": true, "id": res.Id})
 }
 
 func (a *APIServer) VerifyOrder(c *gin.Context) {
@@ -72,11 +88,16 @@ func (a *APIServer) VerifyOrder(c *gin.Context) {
 		return
 	}
 
+	TotalAmount := order.TotalPrice + order.DeliveryPrice
+	if order.Code != nil {
+		TotalAmount -= order.TotalPrice * order.Code.Value / 100
+	}
+
 	emailData := mailer.NewOrderStatusEmail{
 		Name:        order.FirstName + " " + order.LastName,
 		OrderNumber: id,
 		OrderDate:   order.CreatedAt.Format("2006-01-02"),
-		TotalAmount: order.TotalPrice + float64(order.DeliveryPrice),
+		TotalAmount: float64(TotalAmount) / 100,
 		Title:       "",
 		SubTitle:    "",
 		Article1:    "",

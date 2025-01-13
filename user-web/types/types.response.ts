@@ -10,12 +10,26 @@ export interface Product {
   sizes: Size[];
 }
 
+export const mapProduct = (product: Product) => {
+  return {
+    ...product,
+    price: product.price / 100,
+  };
+};
+
 export interface DeliveryMethod {
   id: string;
   name: string;
   price: number;
   additional_info_label: string;
 }
+
+export const mapDeliveryMethod = (deliveryMethod: DeliveryMethod) => {
+  return {
+    ...deliveryMethod,
+    price: deliveryMethod.price / 100,
+  };
+};
 
 export interface Photo {
   id: string;

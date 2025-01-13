@@ -21,3 +21,8 @@ export enum Status {
   Completed = "completed",
   Cancelled = "cancelled",
 }
+
+export interface CodeResponse {
+  code: string;
+  value: number;
+}

@@ -103,9 +103,11 @@ const OrderDetails = ({ id }: Props) => {
             )}
           </div>
           <div className="space-y-0.5">
-            <small>Cena Zamówienia</small>
+            <small>Wartosc Zamówienia</small>
             {order ? (
-              <h2 className="text-xl ps-2 min-w-[130px]">{order.total_price} PLN</h2>
+              <h2 className="text-xl ps-2 min-w-[130px]">
+                {order.total_price - (order.total_price * (order.code?.value || 0)) / 100} PLN
+              </h2>
             ) : (
               <Skeleton className="h-8 w-[130px]" />
             )}
@@ -146,6 +148,21 @@ const OrderDetails = ({ id }: Props) => {
               <Skeleton className="h-8 w-[130px]" />
             )}
           </div>
+          <div className="space-y-0.5">
+            <small>Do zaplaty</small>
+            {order ? (
+              <h2 className="text-xl ps-2 min-w-[130px] underline ">
+                <b>
+                  {order.total_price -
+                    (order.total_price * (order.code?.value || 0)) / 100 +
+                    order.delivery_method.price}{" "}
+                  PLN
+                </b>
+              </h2>
+            ) : (
+              <Skeleton className="h-8 w-[130px]" />
+            )}
+          </div>
         </CardContent>
       </Card>
       <Card>
@@ -159,6 +176,7 @@ const OrderDetails = ({ id }: Props) => {
                 <TableRow>
                   <TableHead>Nazwa Produktu</TableHead>
                   <TableHead>Cena jednostkowa</TableHead>
+                  <TableHead>Znizka jednostkowa</TableHead>
                   <TableHead>Ilość</TableHead>
                   <TableHead>Rozmiar</TableHead>
                   <TableHead>Wartość</TableHead>
@@ -169,9 +187,14 @@ const OrderDetails = ({ id }: Props) => {
                   <TableRow key={index}>
                     <TableCell>{product.product.name}</TableCell>
                     <TableCell>{product.product.price} PLN</TableCell>
+                    <TableCell>{(product.product.price * (order!.code?.value || 0)) / 100} PLN</TableCell>
                     <TableCell>{product.quantity}</TableCell>
                     <TableCell>{product.size.label}</TableCell>
-                    <TableCell className="font-bold">{product.product.price * product.quantity} PLN</TableCell>
+                    <TableCell className="font-bold">
+                      {(product.product.price - (product.product.price * (order!.code?.value || 0)) / 100) *
+                        product.quantity}{" "}
+                      PLN
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

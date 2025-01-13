@@ -10,7 +10,7 @@ type Product struct {
 	Description          string         `gorm:"not null" json:"description"`
 	AditionalDescription string         `gorm:"not null" json:"aditional_description"`
 	Material             string         `gorm:"not null" json:"material"`
-	Price                float64        `gorm:"not null" json:"price"`
+	Price                int            `gorm:"not null" json:"price"`
 	Discount             int            `grom:"null" json:"discount"`
 	CreatedAt            time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt            time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
@@ -48,7 +48,7 @@ type ProductUserResponse struct {
 	Description          string         `json:"description"`
 	AditionalDescription string         `json:"aditional_description"`
 	Material             string         `json:"material"`
-	Price                float64        `json:"price"`
+	Price                int            `json:"price"`
 	Discount             int            `json:"discount"`
 	Photos               []ProductPhoto `json:"photos"`
 	Sizes                []Size         `json:"sizes"`

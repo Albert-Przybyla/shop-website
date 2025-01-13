@@ -96,3 +96,11 @@ func (p *Postgres) GetCodes(pageSize, pageNumber int) (model.PagedListResponse[m
 	return response, nil
 
 }
+
+func (p *Postgres) UseCode(code string) error {
+	res := p.db.Model(&model.Code{}).Where("code = ?", code).Update("uses", gorm.Expr("uses + 1"))
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}

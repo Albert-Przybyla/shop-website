@@ -22,3 +22,8 @@ type CodeRequest struct {
 	Description *string    `json:"description"`
 	Expiration  *time.Time `json:"expiration"`
 }
+
+type UserCodeResponse struct {
+	Code  string `json:"code"`
+	Value int    `json:"value"`
+}

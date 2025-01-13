@@ -15,7 +15,7 @@ func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateOrde
 		return nil, fmt.Errorf("zamówienie musi zawierać przynajmniej jeden produkt")
 	}
 
-	totalPrice := 0.0
+	totalPrice := 0
 	products := []model.OrderProduct{}
 	for _, requestProduct := range req.Products {
 		var product model.Product
@@ -41,7 +41,7 @@ func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateOrde
 			SizeId:    requestProduct.SizeId,
 		})
 
-		totalPrice += (product.Price - (product.Price * float64(product.Discount) / 100)) * float64(requestProduct.Quantity)
+		totalPrice += (product.Price - int(product.Price*product.Discount/100)) * requestProduct.Quantity
 	}
 
 	var delivery model.DeliveryMethod
@@ -70,6 +70,7 @@ func (p *Postgres) CreateOrder(req *model.CreateOrderRequest) (*model.CreateOrde
 		DeliveryMethodAdditionalInfo: req.DeliveryMethodAdditionalInfo,
 		Note:                         req.Note,
 		Products:                     products,
+		OrderCode:                    req.Code,
 	}
 
 	res := p.db.Create(&order)
@@ -134,7 +135,7 @@ func (p *Postgres) GetOrders(pageNumber, pageSize int) (model.PagedListResponse[
 
 func (p *Postgres) GetOrderById(id string) (*model.Order, error) {
 	var order model.Order
-	res := p.db.Preload("DeliveryMethod").Preload("Products").Preload("Products.Product").Preload("Products.Size").Where("id = ?", id).First(&order)
+	res := p.db.Preload("DeliveryMethod").Preload("Products").Preload("Products.Product").Preload("Products.Size").Preload("Code").Where("id = ?", id).First(&order)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return nil, res.Error

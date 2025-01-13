@@ -12,7 +12,7 @@ func (p *Postgres) CreateProduct(req *model.ProductRequest) (*model.CreateElemen
 		Description:          req.Description,
 		Material:             req.Material,
 		AditionalDescription: req.AditionalDescription,
-		Price:                req.Price,
+		Price:                int(req.Price * 100),
 		Discount:             0,
 	}
 	res := p.db.Create(&product)
@@ -27,7 +27,13 @@ func (p *Postgres) CreateProduct(req *model.ProductRequest) (*model.CreateElemen
 }
 
 func (p *Postgres) UpdateProduct(id string, req *model.ProductRequest) error {
-	res := p.db.Model(&model.Product{}).Where("id = ? ", id).Updates(req)
+	res := p.db.Model(&model.Product{}).Where("id = ? ", id).Updates(model.Product{
+		Name:                 req.Name,
+		Description:          req.Description,
+		AditionalDescription: req.AditionalDescription,
+		Material:             req.Material,
+		Price:                int(req.Price * 100),
+	})
 	if res.Error != nil {
 		return res.Error
 	}

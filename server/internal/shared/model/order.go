@@ -21,7 +21,7 @@ type Order struct {
 	LastName                     string         `gorm:"not null" json:"last_name"`
 	Email                        string         `gorm:"not null" json:"email"`
 	DeliveryPrice                int            `gorm:"not null" json:"delivery_price"`
-	TotalPrice                   float64        `gorm:"not null" json:"total_price"`
+	TotalPrice                   int            `gorm:"not null" json:"total_price"`
 	Phone                        string         `gorm:"not null" json:"phone"`
 	ConfirmationCode             string         `gorm:"not null" json:"confirmation_code"`
 	Status                       Status         `gorm:"not null" json:"status"`
@@ -36,7 +36,7 @@ type Order struct {
 	Products                     []OrderProduct `gorm:"foreignKey:OrderId" json:"products"`
 	CreatedAt                    time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt                    time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	OrderCode                    string         `gorm:"type:varchar;nullable" json:"order_code"`
+	OrderCode                    *string        `gorm:"type:varchar;nullable" json:"order_code"`
 	Code                         *Code          `gorm:"foreignKey:OrderCode" json:"code"`
 }
 
@@ -62,6 +62,7 @@ type CreateOrderRequest struct {
 	DeliveryMethodId             string                `json:"delivery_method_id"`
 	DeliveryMethodAdditionalInfo string                `json:"delivery_method_additional_info"`
 	Note                         string                `json:"note"`
+	Code                         *string               `json:"code"`
 }
 
 type OrderProductRequest struct {

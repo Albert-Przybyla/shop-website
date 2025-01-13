@@ -1,5 +1,5 @@
 import { ErrorResponse, PaginatedApiResponse } from "@/types/base.types";
-import { DeliveryMethodResponse } from "@/types/types.response";
+import { DeliveryMethodResponse, mapDeliveryMethodResponse } from "@/types/types.response";
 import { api } from "./api";
 import { DeliveryMethodModel } from "@/schemas/DeliveryMethodSchema";
 
@@ -18,7 +18,10 @@ export const fetchDeliveryMethods = async (
     if (response.status !== 200) {
       throw new Error("Failed to fetch Sizes.");
     }
-    return response.data as PaginatedApiResponse<DeliveryMethodResponse>;
+    return {
+      ...response.data,
+      items: response.data.items.map(mapDeliveryMethodResponse),
+    } as PaginatedApiResponse<DeliveryMethodResponse>;
   } catch (e: any) {
     return {
       error: e.message,

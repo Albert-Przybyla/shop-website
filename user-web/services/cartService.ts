@@ -2,6 +2,7 @@ import { AddToCartModel } from "@/schemas/AddToCartSchema";
 import Cookies from "js-cookie";
 
 const COOKIE_NAME = "cart";
+const PROMOCODE_COOKIE_NAME = "promo_code";
 
 const getCart = (): AddToCartModel[] => {
   const cart = Cookies.get(COOKIE_NAME);
@@ -54,10 +55,25 @@ const clearCart = () => {
   Cookies.remove(COOKIE_NAME);
 };
 
+const getPromoCode = (): string | null => {
+  return Cookies.get(PROMOCODE_COOKIE_NAME) || null;
+};
+
+const savePromoCode = (promoCode: string) => {
+  Cookies.set(PROMOCODE_COOKIE_NAME, promoCode, { expires: 7 });
+};
+
+const removePromoCode = () => {
+  Cookies.remove(PROMOCODE_COOKIE_NAME);
+};
+
 export const CartService = {
   getCart,
   addItem,
   removeItem,
   updateItemQuantity,
   clearCart,
+  getPromoCode,
+  savePromoCode,
+  removePromoCode,
 };

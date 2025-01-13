@@ -1,5 +1,6 @@
 import { fetchProduct } from "@/api/product";
 import ProductSlider from "@/components/ProductSlider";
+import { PriceDisplay } from "@/components/utils";
 import AddToCartForm from "@/forms/AddToCartForm";
 import { Product } from "@/types/types.response";
 import { notFound } from "next/navigation";
@@ -26,9 +27,12 @@ const Page = async ({ params }: Props) => {
         <div className="md:w-1/2 flex flex-col justify-center items-center">
           <ProductSlider photos={product.photos} />
         </div>
-        <div className="md:w-1/2 space-y-6 p-6">
-          <div>
+        <div className="md:w-1/2 space-y-6 px-6">
+          <div className="space-y-2">
             <h3 className="text-3xl">{product.name}</h3>
+            <h4 className="text-4xl font-thin">
+              <PriceDisplay price={product.price} />
+            </h4>
           </div>
           <div className="space-y-2">
             <h6 className="text-xl">Opis</h6>

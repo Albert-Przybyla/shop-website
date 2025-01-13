@@ -9,4 +9,7 @@ func (a *APIServer) Routes() {
 	a.engine.GET("/order/:id/status", a.CheckOrderStatus)
 
 	a.engine.GET("/delivery-method", a.GetDeliveryMethods)
+
+	a.engine.GET("/code/:code/verify", a.CheckCode)
+	a.engine.GET("/code/:code", a.GetCodeByCode)
 }

@@ -5,12 +5,17 @@ import { fetchProduct } from "@/api/product";
 import Loader from "@/components/Loader";
 import { CartService } from "@/services/cartService";
 import { DeliveryMethod, Product } from "@/types/types.response";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { OrderModel, OrderSchema } from "@/schemas/OrderFormSchema";
 import { fetchDeliveryMethods } from "@/api/deliveryMethod";
 import Button from "@/components/Button";
 import { createOrder } from "@/api/order";
 import { toast } from "react-toastify";
+import { PromoCodeModel, PromoCodeSchema } from "@/schemas/PromoCodeSchema";
+import { fetchCode, validateCode } from "@/api/code";
+import { CodeResponse } from "@/types/base.types";
+import { p } from "framer-motion/m";
+import { PriceDisplay } from "@/components/utils";
 
 type CartItem = {
   product_id: string;
@@ -22,6 +27,7 @@ type CartItem = {
 const Page = () => {
   const notify = (t: string) => toast(t);
   const [cart, setCart] = React.useState<CartItem[]>([]);
+  const [code, setCode] = React.useState<CodeResponse | null>(null);
   const [deliveryMethods, setDeliveryMethods] = React.useState<DeliveryMethod[]>([]);
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = React.useState<DeliveryMethod | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -29,13 +35,39 @@ const Page = () => {
   const form = useForm<OrderModel>({
     resolver: zodResolver(OrderSchema),
   });
+
+  const [codeError, setCodeError] = useState<string | null>(null);
+
+  const promoCodeform = useForm<PromoCodeModel>({
+    resolver: zodResolver(PromoCodeSchema),
+  });
+
+  const checkCode = async (values: PromoCodeModel) => {
+    setLoading(true);
+    CartService.removePromoCode();
+    const validationResponse = await validateCode(values);
+    if (validationResponse.success) {
+      notify(validationResponse.message + " Kod został zapisany.");
+      setCodeError(null);
+      CartService.savePromoCode(values.code);
+      await getCode(values.code);
+      setLoading(false);
+    } else {
+      notify(validationResponse.message);
+      setCodeError(validationResponse.message);
+      setLoading(false);
+    }
+  };
+
   const onSubmit = async (values: OrderModel) => {
     setLoading(true);
-    const order = await createOrder(values);
+    const code = CartService.getPromoCode();
+    const order = await createOrder(values, code);
     if ("error" in order) {
-      notify("Bład podczas tworzenia zamówienia: " + order.error);
+      notify(order.error);
     } else if ("id" in order) {
       CartService.clearCart();
+      CartService.removePromoCode();
       notify("Zamówienie zostało złożone!");
       window.location.href = "/checkout/" + order.id;
     }
@@ -46,8 +78,26 @@ const Page = () => {
     getData();
   }, []);
 
+  const getCode = async (code: string): Promise<void> => {
+    try {
+      const code_res = await fetchCode(code);
+      setCode(code_res);
+    } catch (e: any) {
+      notify("Coś poszło nie tak!");
+    }
+  };
+
+  const calcOrderValue = () => {
+    return cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  };
+
   const getData = async () => {
     setLoading(true);
+    const promoCode = CartService.getPromoCode();
+    if (promoCode) {
+      promoCodeform.setValue("code", promoCode);
+      await getCode(promoCode);
+    }
     const cartFromCookie = CartService.getCart();
     if (cartFromCookie.length === 0) {
       window.location.href = "/";
@@ -80,7 +130,7 @@ const Page = () => {
   return (
     <>
       <div className="container mx-auto mt-[100px] mb-[200px] space-y-12 ">
-        <h1 className="text-3xl font-bold px-3 text-center">zamówienie</h1>
+        <h1 className="text-3xl font-bold px-3 text-center">Zamówienie</h1>
         <div className="flex flex-col-reverse px-3 xl:flex-row gap-6 relative">
           <div className="xl:w-2/3 space-y-6 px-6">
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -174,7 +224,9 @@ const Page = () => {
                         <input id={method.id} {...form.register("delivery_method_id")} type="radio" value={method.id} />
                         <label htmlFor={method.id}>{method.name}</label>
                       </div>
-                      <p>{method.price} PLN</p>
+                      <p>
+                        <PriceDisplay price={method.price} />
+                      </p>
                     </div>
                   );
                 })}
@@ -190,9 +242,7 @@ const Page = () => {
                     <p>{form.formState.errors.delivery_method_additional_info?.message}</p>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+              ) : null}
               <h3 className="text-3xl font-bold my-3">Metoda płatności</h3>
               <div className="space-y-3 mb-4">
                 <div className="w-full p-3 border space-y-3">
@@ -228,12 +278,16 @@ const Page = () => {
                           <p>{item.product.name}</p>
                         </div>
                         <p>Ilość: {item.quantity}</p>
-                        <p>Cena za sztuke: {item.product.price} PLN</p>
+                        <p>
+                          Cena za sztuke: <PriceDisplay price={item.product.price} />
+                        </p>
                         <p>
                           Rozmiar:{" "}
                           {item.product.sizes.find((size) => size.id === item.size_id)?.label || "Brak rozmiaru"}
                         </p>
-                        <p className="font-bold text-lg">Suma: {item.product.price * item.quantity} PLN</p>
+                        <p className="font-bold text-lg">
+                          Suma: <PriceDisplay price={item.product.price * item.quantity} />
+                        </p>
                       </div>
                     </div>
                     <hr />
@@ -241,22 +295,61 @@ const Page = () => {
                 );
               })}
               <div>
+                <form onSubmit={promoCodeform.handleSubmit(checkCode)}>
+                  <div className="form-box flex-grow-0">
+                    <label htmlFor="street">Kod promocyjny</label>
+                    <div className="flex flex-row">
+                      <input
+                        {...promoCodeform.register("code")}
+                        type="text"
+                        className="flex-grow"
+                        onChange={() => setCodeError(null)}
+                      />
+                      <Button type="submit" className="border-l-0">
+                        Zastosuj
+                      </Button>
+                    </div>
+                    <div className="errors">
+                      <p>
+                        {promoCodeform.formState.errors.code?.message}
+                        {codeError}
+                      </p>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <hr />
+              <div>
                 <div className="flex flex-row justify-between p-3">
                   <p className="font-bold">Suma zamówienia:</p>
                   <p className="font-bold">
-                    {cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0)} PLN
+                    <PriceDisplay price={calcOrderValue()} />
                   </p>
                 </div>
+                {code && (
+                  <div className="flex flex-row justify-between p-3">
+                    <p className="font-bold">Po zastosowaniu kodu promocyjnego:</p>
+                    <p className="font-bold">
+                      <PriceDisplay price={calcOrderValue() - (calcOrderValue() * code.value) / 100} />
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-row justify-between p-3">
                   <p className="font-bold">Koszt wysyłki:</p>
-                  <p className="font-bold">{selectedDeliveryMethod?.price || 0} PLN</p>
+                  <p className="font-bold">
+                    <PriceDisplay price={selectedDeliveryMethod?.price || 0} />
+                  </p>
                 </div>
                 <div className="flex flex-row justify-between p-3">
                   <p className="font-bold text-xl">Suma do zapłaty:</p>
                   <p className="font-bold text-xl">
-                    {cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0) +
-                      (selectedDeliveryMethod?.price || 0)}{" "}
-                    PLN
+                    <PriceDisplay
+                      price={
+                        calcOrderValue() +
+                        (selectedDeliveryMethod?.price || 0) -
+                        (code ? (calcOrderValue() * code.value) / 100 : 0)
+                      }
+                    />
                   </p>
                 </div>
               </div>

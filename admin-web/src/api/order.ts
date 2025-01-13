@@ -1,6 +1,6 @@
 import { ErrorResponse, PaginatedApiResponse } from "@/types/base.types";
 import { api } from "./api";
-import { OrderResponse } from "@/types/types.response";
+import { mapOrderResponse, OrderResponse } from "@/types/types.response";
 
 export const fetchOrders = async (
   page_number: number,
@@ -31,7 +31,7 @@ export const fetchOrder = async (order_id: string): Promise<OrderResponse | Erro
     if (response.status !== 200) {
       throw new Error("Failed to fetch Resellers.");
     }
-    return response.data as OrderResponse;
+    return mapOrderResponse(response.data as OrderResponse);
   } catch (e: any) {
     return {
       error: e.message,

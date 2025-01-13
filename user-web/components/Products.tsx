@@ -2,6 +2,7 @@ import { fetchProducts } from "@/api/product";
 import { PagedResponse } from "@/types/base.types";
 import { Product } from "@/types/types.response";
 import NavBtn from "./actions/NavBtn";
+import { PriceDisplay } from "./utils";
 
 const Products = async () => {
   const products: PagedResponse<Product> = await fetchProducts();
@@ -25,7 +26,9 @@ const Products = async () => {
                 )}
               </div>
               <h3 className="text-xl font-bold">{product.name}</h3>
-              <p>{product.price} PLN</p>
+              <p>
+                <PriceDisplay price={product.price} />
+              </p>
               <div className="flex felx-row gap-2">
                 <NavBtn route={`/product/${product.id}`}>Szczegóły</NavBtn>
               </div>

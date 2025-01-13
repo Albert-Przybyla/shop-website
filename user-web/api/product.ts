@@ -1,6 +1,6 @@
 import { PagedResponse } from "@/types/base.types";
 import { api } from "./api";
-import { Product } from "@/types/types.response";
+import { mapProduct, Product } from "@/types/types.response";
 
 export const fetchProducts = async (page: number = 1, pageSize: number = 10): Promise<PagedResponse<Product>> => {
   const response = await api.get(`/product`, {
@@ -13,10 +13,13 @@ export const fetchProducts = async (page: number = 1, pageSize: number = 10): Pr
       "Cache-Control": "no-cache",
     },
   });
-  return response.data;
+  return {
+    ...response.data,
+    items: response.data.items.map(mapProduct),
+  };
 };
 
 export const fetchProduct = async (productId: string): Promise<Product> => {
   const response = await api.get(`/product/${productId}`);
-  return response.data;
+  return mapProduct(response.data);
 };

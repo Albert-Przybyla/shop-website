@@ -8,6 +8,14 @@ export interface ProductResponse {
   updated_at: string;
 }
 
+export const mapProductResponse = (data: ProductResponse): ProductResponse => {
+  return {
+    ...data,
+    price: formatPrice(data.price),
+    discount: formatPrice(data.discount),
+  };
+};
+
 export interface ProductDetailsResponse {
   id: string;
   name: string;
@@ -21,6 +29,14 @@ export interface ProductDetailsResponse {
   photos: Photo[];
   sizes: SizeResponse[];
 }
+
+export const mapProductDetailsResponse = (data: ProductDetailsResponse): ProductDetailsResponse => {
+  return {
+    ...data,
+    price: formatPrice(data.price),
+    discount: formatPrice(data.discount),
+  };
+};
 
 export interface Photo {
   id: string;
@@ -48,9 +64,30 @@ export interface OrderResponse {
   delivery_method_additional_info: string;
   note: string;
   products: OrderProductResponse[];
+  order_code: string;
+  code?: CodeResponse;
   created_at: string;
   updated_at: string;
 }
+
+export const mapOrderResponse = (data: OrderResponse): OrderResponse => {
+  return {
+    ...data,
+    total_price: formatPrice(data.total_price),
+    delivery_method: {
+      ...data.delivery_method,
+      price: formatPrice(data.delivery_method.price),
+    },
+    products: data.products.map((product) => ({
+      ...product,
+      product: {
+        ...product.product,
+        price: formatPrice(product.product.price),
+        discount: formatPrice(product.product.discount),
+      },
+    })),
+  };
+};
 
 export interface SizeResponse {
   id: string;
@@ -77,6 +114,13 @@ export interface DeliveryMethodResponse {
   updated_at: string;
 }
 
+export const mapDeliveryMethodResponse = (data: DeliveryMethodResponse): DeliveryMethodResponse => {
+  return {
+    ...data,
+    price: formatPrice(data.price),
+  };
+};
+
 export interface OrderProductResponse {
   order_id: string;
   product_id: string;
@@ -97,4 +141,8 @@ export interface CodeResponse {
   show_on_page: boolean;
   updated_at: string;
   created_at: string;
+}
+
+function formatPrice(priceInCents: number): number {
+  return priceInCents / 100;
 }

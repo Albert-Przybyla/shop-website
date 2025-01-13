@@ -1,5 +1,10 @@
 import { ErrorResponse, PaginatedApiResponse } from "@/types/base.types";
-import { ProductDetailsResponse, ProductResponse } from "@/types/types.response";
+import {
+  mapProductDetailsResponse,
+  mapProductResponse,
+  ProductDetailsResponse,
+  ProductResponse,
+} from "@/types/types.response";
 import { api } from "./api";
 import { ProductModel } from "@/schemas/ProductSchema";
 import { ProductDiscountModel } from "@/schemas/ProductDiscountSchema";
@@ -19,7 +24,10 @@ export const fetchProducts = async (
     if (response.status !== 200) {
       throw new Error("Failed to fetch products.");
     }
-    return response.data as PaginatedApiResponse<ProductResponse>;
+    return {
+      ...response.data,
+      items: response.data.items.map(mapProductResponse),
+    } as PaginatedApiResponse<ProductResponse>;
   } catch (e: any) {
     return {
       error: e.message,
@@ -34,7 +42,7 @@ export const fetchProduct = async (product_id: string): Promise<ProductDetailsRe
     if (response.status !== 200) {
       throw new Error("Failed to fetch product.");
     }
-    return response.data as ProductDetailsResponse;
+    return mapProductDetailsResponse(response.data as ProductDetailsResponse);
   } catch (e: any) {
     return {
       error: e.message,

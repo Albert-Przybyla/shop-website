@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Link from "next/link";
 import { ExternalLink, Link2, Minus, Plus, SquareArrowOutUpLeft, SquareArrowOutUpRight } from "lucide-react";
 import { toast } from "react-toastify";
+import { PriceDisplay } from "@/components/utils";
 
 type CartItem = {
   product_id: string;
@@ -78,9 +79,13 @@ const Page = () => {
                           />
                         </Link>
                       </p>
-                      <p>{item.product.price * item.quantity} PLN</p>
+                      <p>
+                        <PriceDisplay price={item.product.price * item.quantity} />
+                      </p>
                     </div>
-                    <p>Cena: {item.product.price} PLN</p>
+                    <p>
+                      Cena: <PriceDisplay price={item.product.price} />
+                    </p>
                     <p>
                       Rozmiar: {item.product.sizes.find((size) => size.id === item.size_id)?.label || "Brak rozmiaru"}
                     </p>
@@ -131,20 +136,23 @@ const Page = () => {
             </div>
           )}
           {Cart.length > 0 && (
-            <div className="flex flex-row justify-end gap-3 px-3">
-              <Link href="/checkout">
-                <Button>Do płatności</Button>
-              </Link>
-              <Button
-                onClick={() => {
-                  CartService.clearCart();
-                  getData();
-                }}
-                type="button"
-              >
-                Wyczysć koszyk
-              </Button>
-            </div>
+            <>
+              {/* <div className="border p-4 flex flex-col md:flex-row gap-6"></div> */}
+              <div className="flex flex-row justify-end gap-3 px-3">
+                <Link href="/checkout">
+                  <Button>Do płatności</Button>
+                </Link>
+                <Button
+                  onClick={() => {
+                    CartService.clearCart();
+                    getData();
+                  }}
+                  type="button"
+                >
+                  Wyczysć koszyk
+                </Button>
+              </div>
+            </>
           )}
         </div>
       </div>
