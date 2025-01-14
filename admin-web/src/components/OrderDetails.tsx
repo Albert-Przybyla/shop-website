@@ -39,6 +39,7 @@ const OrderDetails = ({ id }: Props) => {
             {order?.status !== "unverified" && (
               <Button
                 variant="outline"
+                disabled={order?.status == "canceled" || order?.status == "unverified" || order?.status == "completed"}
                 onClick={async () => {
                   const ans = await showDialog({
                     title: "Zaktualizuj status zamówienia",
