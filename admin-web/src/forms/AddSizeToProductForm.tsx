@@ -13,15 +13,18 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const AddSizeToProductForm = ({ onClose, data, elementId }: ModalProps<AddSizeToProductModel>) => {
+  const [loading, setLoading] = useState(false);
   const [sizes, setSizes] = useState<SizeResponse[]>([]);
   const form = useForm<AddSizeToProductModel>({
     resolver: zodResolver(AddSizeToProductSchema),
     defaultValues: data || {},
   });
   const onSubmit = async (values: AddSizeToProductModel) => {
+    setLoading(true);
     const ans = await addSizeToProduct(elementId!, values.size);
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -71,6 +74,7 @@ const AddSizeToProductForm = ({ onClose, data, elementId }: ModalProps<AddSizeTo
         <div className="flex flex-row gap-2">
           <Button
             type="reset"
+            disabled={loading}
             variant="secondary"
             className="flex-grow justify-center gap-2"
             onClick={() => {
@@ -80,7 +84,7 @@ const AddSizeToProductForm = ({ onClose, data, elementId }: ModalProps<AddSizeTo
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" disabled={loading} className="flex-grow justify-center gap-2">
             <Save width={18} height={18} />
             Zapisz
           </Button>

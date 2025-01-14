@@ -7,15 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
 import { updateOrderStatus } from "@/api/order";
 import { OrderCancelationModel, OrderCancelationSchema } from "@/schemas/OrderCancelationSchema";
+import { useState } from "react";
 
 const OrderCancelationForm = ({ onClose, elementId }: ModalProps<null>) => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<OrderCancelationModel>({
     resolver: zodResolver(OrderCancelationSchema),
   });
   const onSubmit = async () => {
+    setLoading(true);
     const ans = await updateOrderStatus(elementId!, { status: "canceled" });
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   return (
@@ -34,6 +38,7 @@ const OrderCancelationForm = ({ onClose, elementId }: ModalProps<null>) => {
         />
         <div className="flex flex-row gap-2">
           <Button
+            disabled={loading}
             type="reset"
             variant="secondary"
             className="flex-grow justify-center gap-2"
@@ -44,7 +49,7 @@ const OrderCancelationForm = ({ onClose, elementId }: ModalProps<null>) => {
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" className="flex-grow justify-center gap-2" disabled={loading}>
             <Save width={18} height={18} />
             Zapisz
           </Button>

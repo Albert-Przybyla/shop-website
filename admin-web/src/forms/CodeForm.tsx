@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { pl } from "date-fns/locale";
 
 const CodeForm = ({ onClose, data }: ModalProps<CodeModel>) => {
+  const [loading, setLoading] = useState(false);
   const [isCodeChecked, setIsCodeChecked] = useState(false);
   const [isCodeExisting, setIsCodeExisting] = useState(false);
 
@@ -29,9 +30,11 @@ const CodeForm = ({ onClose, data }: ModalProps<CodeModel>) => {
     defaultValues: data || {},
   });
   const onSubmit = async (values: CodeModel) => {
+    setLoading(true);
     const ans = createCode(values);
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   const checkIsCodeExist = async () => {
@@ -149,6 +152,7 @@ const CodeForm = ({ onClose, data }: ModalProps<CodeModel>) => {
         <div className="flex flex-row gap-2">
           <Button
             type="reset"
+            disabled={loading}
             variant="secondary"
             className="flex-grow justify-center gap-2"
             onClick={() => {
@@ -158,7 +162,7 @@ const CodeForm = ({ onClose, data }: ModalProps<CodeModel>) => {
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" disabled={loading} className="flex-grow justify-center gap-2">
             <Save width={18} height={18} />
             Zapisz
           </Button>

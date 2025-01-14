@@ -3,21 +3,24 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SizeModel, SizeSchema } from "@/schemas/SizeSchema";
 import { ModalProps } from "@/types/base.types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
 import { createSize, updateSize } from "@/api/size";
 
 const SizeForm = ({ onClose, data, elementId }: ModalProps<SizeModel>) => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<SizeModel>({
     resolver: zodResolver(SizeSchema),
     defaultValues: data || {},
   });
   const onSubmit = async (values: SizeModel) => {
+    setLoading(true);
     const ans = elementId ? await updateSize(elementId, values) : await createSize(values);
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -43,6 +46,7 @@ const SizeForm = ({ onClose, data, elementId }: ModalProps<SizeModel>) => {
         <div className="flex flex-row gap-2">
           <Button
             type="reset"
+            disabled={loading}
             variant="secondary"
             className="flex-grow justify-center gap-2"
             onClick={() => {
@@ -52,7 +56,7 @@ const SizeForm = ({ onClose, data, elementId }: ModalProps<SizeModel>) => {
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" disabled={loading} className="flex-grow justify-center gap-2">
             <Save width={18} height={18} />
             Zapisz
           </Button>

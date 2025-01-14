@@ -3,21 +3,24 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ModalProps } from "@/types/base.types";
 import { DeliveryMethodModel, DeliveryMethodSchema } from "@/schemas/DeliveryMethodSchema";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
 import { createDeliveryMethod, updateDeliveryMethod } from "@/api/deliveryMethod";
 
 const DeliveryMethodForm = ({ onClose, data, elementId }: ModalProps<DeliveryMethodModel>) => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<DeliveryMethodModel>({
     resolver: zodResolver(DeliveryMethodSchema),
     defaultValues: data || {},
   });
   const onSubmit = async (values: DeliveryMethodModel) => {
+    setLoading(true);
     const ans = elementId ? await updateDeliveryMethod(elementId, values) : await createDeliveryMethod(values);
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -65,6 +68,7 @@ const DeliveryMethodForm = ({ onClose, data, elementId }: ModalProps<DeliveryMet
         <div className="flex flex-row gap-2">
           <Button
             type="reset"
+            disabled={loading}
             variant="secondary"
             className="flex-grow justify-center gap-2"
             onClick={() => {
@@ -74,7 +78,7 @@ const DeliveryMethodForm = ({ onClose, data, elementId }: ModalProps<DeliveryMet
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" disabled={loading} className="flex-grow justify-center gap-2">
             <Save width={18} height={18} />
             Zapisz
           </Button>

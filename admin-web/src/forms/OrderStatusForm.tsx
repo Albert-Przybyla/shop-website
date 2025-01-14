@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ModalProps } from "@/types/base.types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
@@ -22,6 +22,7 @@ const getNewStatus = (status: string) => {
 };
 
 const OrderStatusForm = ({ onClose, data, elementId }: ModalProps<OrderStatusModel & { status: string }>) => {
+  const [loading, setLoading] = useState(false);
   const form = useForm<OrderStatusModel>({
     resolver: zodResolver(OrderStatusSchema),
     defaultValues: {
@@ -29,9 +30,11 @@ const OrderStatusForm = ({ onClose, data, elementId }: ModalProps<OrderStatusMod
     },
   });
   const onSubmit = async (values: OrderStatusModel) => {
+    setLoading(true);
     const ans = await updateOrderStatus(elementId!, values);
     console.log(ans);
     onClose?.(true);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -83,6 +86,7 @@ const OrderStatusForm = ({ onClose, data, elementId }: ModalProps<OrderStatusMod
         />
         <div className="flex flex-row gap-2">
           <Button
+            disabled={loading}
             type="reset"
             variant="secondary"
             className="flex-grow justify-center gap-2"
@@ -93,7 +97,7 @@ const OrderStatusForm = ({ onClose, data, elementId }: ModalProps<OrderStatusMod
             <X width={18} height={18} />
             Anuluj
           </Button>
-          <Button type="submit" className="flex-grow justify-center gap-2">
+          <Button type="submit" disabled={loading} className="flex-grow justify-center gap-2">
             <Save width={18} height={18} />
             Zapisz
           </Button>

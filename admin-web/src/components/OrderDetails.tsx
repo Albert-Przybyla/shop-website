@@ -66,8 +66,9 @@ const OrderDetails = ({ id }: Props) => {
                   getData();
                 }
               }}
+              disabled={order?.status != "canceled"}
             >
-              <XCircle /> Adnuluj zamówienie
+              <XCircle /> Anuluj zamówienie
             </Button>
           </CardButtons>
         </CardHeader>
